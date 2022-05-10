@@ -29,8 +29,10 @@
         "webpack-merge": "^5.8.0"
     },
     "devDependencies": {
+        "@types/dat.gui": "^0.7.7",
+        "dat.gui": "^0.7.9",
         "file-loader": "^6.2.0",
-        "node-sass": "^6.0.1",
+        "node-sass": "^7.0.1",
         "sass-loader": "^12.1.0",
         "webpack": "^5.49.0"
     }
