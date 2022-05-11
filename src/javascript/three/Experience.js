@@ -18,18 +18,11 @@ export const scene = new THREE.Scene()
 
 export const loaders = new Loaders()
 
-const torus = new THREE.Mesh(
-  new THREE.TorusGeometry(1, 0.3, 20, 40),
-  new THREE.MeshBasicMaterial({ color: "blue", wireframe: true })
-)
-scene.add(torus)
-
 export const sizes = new Sizes()
 
 export const camera = new Camera()
 
 export const renderer = new Renderer()
-
 
 
 // Setup URL Params
@@ -50,7 +43,17 @@ const PARAMS = {
   'rot x': R.random_num(0, Math.PI * 2),
   'rot y': R.random_num(0, Math.PI * 2),
   'rot z': R.random_num(0, Math.PI * 2),
+  background: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF)
+  color: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF)
 }
+
+scene.background = new THREE.Color(PARAMS.background)
+
+const torus = new THREE.Mesh(
+  new THREE.TorusGeometry(1, 0.3, 20, 40),
+  new THREE.MeshBasicMaterial({ color: PARAMS.color, wireframe: true })
+)
+scene.add(torus)
 
 torus.rotation.x = PARAMS['rot x']
 torus.rotation.y = PARAMS['rot y']
@@ -81,7 +84,7 @@ pane.addInput(PARAMS, 'rot z', {
 // GenArray GUI
 const genArrayParams = {
   projectNum: projectNum,
-  seed: 1000,
+  seed: urlParamObj.seed ? urlParamObj.seed : -1,
   'iterations': 10,
   go: 0
 }
