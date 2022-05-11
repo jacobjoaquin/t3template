@@ -56,6 +56,28 @@ pane.addInput(PARAMS, 'cube z', {
   cube.rotation.z = ev.value
 })
 
+// GenArray GUI
+const genArrayParams = {
+  seed: 1000,
+  'iterations': 10,
+  go: 0
+}
+
+const genArrayFolder = pane.addFolder({
+  title: 'GenArray'
+})
+genArrayFolder.addInput(genArrayParams, 'seed', {
+  format: (v) => v.toFixed()
+})
+genArrayFolder.addInput(genArrayParams, 'iterations', {
+  min: 1,
+  max: 100,
+  format: (v) => v.toFixed()
+})
+genArrayFolder.addButton({
+  title: 'Render',
+});
+
 
 //Animate
 const clock = new THREE.Clock()
