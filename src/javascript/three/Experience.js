@@ -18,11 +18,11 @@ export const scene = new THREE.Scene()
 
 export const loaders = new Loaders()
 
-const cube = new THREE.Mesh(
+const torus = new THREE.Mesh(
   new THREE.TorusGeometry(1, 0.3, 20, 40),
   new THREE.MeshBasicMaterial({ color: "blue", wireframe: true })
 )
-scene.add(cube)
+scene.add(torus)
 
 export const sizes = new Sizes()
 
@@ -30,35 +30,52 @@ export const camera = new Camera()
 
 export const renderer = new Renderer()
 
-// Setup Token
+
+
+// Setup URL Params
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const urlParamObj = {
+  seed: urlParams.get('seed')
+}
+
+// Setup Token and Random
 const projectNum = 123
-const tokenData = genTokenData(projectNum)
+const seed = urlParamObj.seed ? urlParamObj.seed : -1
+const tokenData = genTokenData(projectNum, seed)
 const R = new Random(tokenData)
 
-// TweakPane
+// Paramters
 const PARAMS = {
-  'cube x': 0,
-  'cube y': 0,
-  'cube z': 0,
+  'rot x': R.random_num(0, Math.PI * 2),
+  'rot y': R.random_num(0, Math.PI * 2),
+  'rot z': R.random_num(0, Math.PI * 2),
 }
+
+torus.rotation.x = PARAMS['rot x']
+torus.rotation.y = PARAMS['rot y']
+torus.rotation.z = PARAMS['rot z']
+
+// Setup Tweakpane
 const pane = new Pane();
-pane.addInput(PARAMS, 'cube x', {
+
+pane.addInput(PARAMS, 'rot x', {
   min: 0,
   max: Math.PI * 2
 }).on('change', (ev) => {
-  cube.rotation.x = ev.value
+  torus.rotation.x = ev.value
 })
-pane.addInput(PARAMS, 'cube y', {
+pane.addInput(PARAMS, 'rot y', {
   min: 0,
   max: Math.PI * 2
 }).on('change', (ev) => {
-  cube.rotation.y = ev.value
+  torus.rotation.y = ev.value
 })
-pane.addInput(PARAMS, 'cube z', {
+pane.addInput(PARAMS, 'rot z', {
   min: 0,
   max: Math.PI * 2
 }).on('change', (ev) => {
-  cube.rotation.z = ev.value
+  torus.rotation.z = ev.value
 })
 
 // GenArray GUI

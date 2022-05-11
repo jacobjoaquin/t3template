@@ -11,7 +11,11 @@ export function genTokenData(projectNum, seed=-1) {
         hash += Math.floor(h * 16).toString(16);
     }
     data.hash = hash;
-    data.tokenId = (projectNum * 1000000 + Math.floor(h * 1000)).toString();
+    if (seed < 0) {
+        data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString();
+    } else {
+
+    }
     return data;
 }
 
