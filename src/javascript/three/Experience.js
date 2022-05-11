@@ -5,7 +5,8 @@ import { Camera } from "./Camera"
 import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
 import { Loaders } from "./Loaders"
-import {Pane} from 'tweakpane';
+import { Pane } from 'tweakpane';
+import { genTokenData, Random } from "./ABRandom"
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -29,6 +30,10 @@ export const camera = new Camera()
 
 export const renderer = new Renderer()
 
+// Setup Token
+const projectNum = 123
+const tokenData = genTokenData(projectNum)
+const R = new Random(tokenData)
 
 // TweakPane
 const PARAMS = {
@@ -58,6 +63,7 @@ pane.addInput(PARAMS, 'cube z', {
 
 // GenArray GUI
 const genArrayParams = {
+  projectNum: projectNum,
   seed: 1000,
   'iterations': 10,
   go: 0
@@ -66,6 +72,12 @@ const genArrayParams = {
 const genArrayFolder = pane.addFolder({
   title: 'GenArray'
 })
+genArrayFolder.addBlade({
+  view: 'text',
+  label: 'project num',
+  parse: (v) => String(v),
+  value: projectNum,
+});
 genArrayFolder.addInput(genArrayParams, 'seed', {
   format: (v) => v.toFixed()
 })
@@ -76,8 +88,9 @@ genArrayFolder.addInput(genArrayParams, 'iterations', {
 })
 genArrayFolder.addButton({
   title: 'Render',
+}).on('click', () => {
+  console.log('Render Clicked')
 });
-
 
 //Animate
 const clock = new THREE.Clock()
