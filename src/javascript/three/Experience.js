@@ -5,6 +5,7 @@ import { Camera } from "./Camera"
 import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
 import { Loaders } from "./Loaders"
+import {Pane} from 'tweakpane';
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -27,6 +28,34 @@ export const sizes = new Sizes()
 export const camera = new Camera()
 
 export const renderer = new Renderer()
+
+
+// TweakPane
+const PARAMS = {
+  'cube x': 0,
+  'cube y': 0,
+  'cube z': 0,
+}
+const pane = new Pane();
+pane.addInput(PARAMS, 'cube x', {
+  min: 0,
+  max: Math.PI * 2
+}).on('change', (ev) => {
+  cube.rotation.x = ev.value
+})
+pane.addInput(PARAMS, 'cube y', {
+  min: 0,
+  max: Math.PI * 2
+}).on('change', (ev) => {
+  cube.rotation.y = ev.value
+})
+pane.addInput(PARAMS, 'cube z', {
+  min: 0,
+  max: Math.PI * 2
+}).on('change', (ev) => {
+  cube.rotation.z = ev.value
+})
+
 
 //Animate
 const clock = new THREE.Clock()
