@@ -47,30 +47,15 @@ const controller = new Controller(model)
 // Setup View
 scene.background = new THREE.Color(PARAMS.background)
 
-const torus = new THREE.Mesh(
+// Setup Torus
+export const torus = new THREE.Mesh(
   new THREE.TorusGeometry(1, 0.3, 20, 40),
   new THREE.MeshBasicMaterial({ color: PARAMS.color, wireframe: true })
 )
 scene.add(torus)
 
-
-torus.rotation.x = PARAMS['rot x']
-torus.rotation.y = PARAMS['rot y']
-torus.rotation.z = PARAMS['rot z']
-
-
-// Setup model action
-model.actions = {
-  'rot x': () => {
-    torus.rotation.x = PARAMS['rot x']
-  },
-  'rot y': () => {
-    torus.rotation.x = PARAMS['rot y']
-  },
-  'rot z': () => {
-    torus.rotation.x = PARAMS['rot z']
-  }
-}
+// Refresh View with Model Data
+model.refresh()
 
 //Animate
 const clock = new THREE.Clock()
