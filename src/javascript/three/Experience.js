@@ -43,8 +43,8 @@ const PARAMS = {
   'rot x': R.random_num(0, Math.PI * 2),
   'rot y': R.random_num(0, Math.PI * 2),
   'rot z': R.random_num(0, Math.PI * 2),
-  background: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF)
-  color: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF)
+  background: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
+  color: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
 }
 
 scene.background = new THREE.Color(PARAMS.background)
@@ -134,6 +134,7 @@ const tick = () => {
   window.requestAnimationFrame(tick)
 
   stats.end()
+
 }
 
 tick()
