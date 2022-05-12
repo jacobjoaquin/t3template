@@ -5,8 +5,9 @@ import { Camera } from "./Camera"
 import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
 import { Loaders } from "./Loaders"
-import { Pane } from 'tweakpane';
 import { genTokenData, Random } from "./ABRandom"
+import { Controller } from "./Controller"
+import { Model } from "./Model"
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -36,17 +37,14 @@ const urlParamObj = {
 const projectNum = 123
 const seed = urlParamObj.seed ? urlParamObj.seed : -1
 const tokenData = genTokenData(projectNum, seed)
-const R = new Random(tokenData)
+const random = new Random(tokenData)
 
-// Paramters
-const PARAMS = {
-  'rot x': R.random_num(0, Math.PI * 2),
-  'rot y': R.random_num(0, Math.PI * 2),
-  'rot z': R.random_num(0, Math.PI * 2),
-  background: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
-  color: R.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
-}
+// Setup Model and Controller
+const model = new Model(random)
+const PARAMS = model.data
+const controller = new Controller(model)
 
+// Setup View
 scene.background = new THREE.Color(PARAMS.background)
 
 const torus = new THREE.Mesh(
@@ -55,62 +53,24 @@ const torus = new THREE.Mesh(
 )
 scene.add(torus)
 
+
 torus.rotation.x = PARAMS['rot x']
 torus.rotation.y = PARAMS['rot y']
 torus.rotation.z = PARAMS['rot z']
 
-// Setup Tweakpane
-const pane = new Pane();
 
-pane.addInput(PARAMS, 'rot x', {
-  min: 0,
-  max: Math.PI * 2
-}).on('change', (ev) => {
-  torus.rotation.x = ev.value
-})
-pane.addInput(PARAMS, 'rot y', {
-  min: 0,
-  max: Math.PI * 2
-}).on('change', (ev) => {
-  torus.rotation.y = ev.value
-})
-pane.addInput(PARAMS, 'rot z', {
-  min: 0,
-  max: Math.PI * 2
-}).on('change', (ev) => {
-  torus.rotation.z = ev.value
-})
-
-// GenArray GUI
-const genArrayParams = {
-  projectNum: projectNum,
-  seed: urlParamObj.seed ? urlParamObj.seed : -1,
-  'iterations': 10,
-  go: 0
+// Setup model action
+model.actions = {
+  'rot x': () => {
+    torus.rotation.x = PARAMS['rot x']
+  },
+  'rot y': () => {
+    torus.rotation.x = PARAMS['rot y']
+  },
+  'rot z': () => {
+    torus.rotation.x = PARAMS['rot z']
+  }
 }
-
-const genArrayFolder = pane.addFolder({
-  title: 'GenArray'
-})
-genArrayFolder.addBlade({
-  view: 'text',
-  label: 'project num',
-  parse: (v) => String(v),
-  value: projectNum,
-});
-genArrayFolder.addInput(genArrayParams, 'seed', {
-  format: (v) => v.toFixed()
-})
-genArrayFolder.addInput(genArrayParams, 'iterations', {
-  min: 1,
-  max: 100,
-  format: (v) => v.toFixed()
-})
-genArrayFolder.addButton({
-  title: 'Render',
-}).on('click', () => {
-  console.log('Render Clicked')
-});
 
 //Animate
 const clock = new THREE.Clock()
