@@ -14,7 +14,8 @@ export function genTokenData(projectNum, seed=-1) {
     if (seed < 0) {
         data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString();
     } else {
-
+        // TODO: Should use a second Math.random()?
+        data.tokenId = (projectNum * 1000000 + Math.floor(h * 1000)).toString();
     }
     return data;
 }
