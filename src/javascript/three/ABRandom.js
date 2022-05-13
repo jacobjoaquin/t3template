@@ -1,19 +1,23 @@
 export function genTokenData(projectNum, hash) {
-    let data = {};
+    let data = {}
     if (!hash) {
-        hash = "0x";
+        hash = "0x"
         for (var i = 0; i < 64; i++) {
-            hash += Math.floor(Math.random() * 16).toString(16);
+            hash += Math.floor(Math.random() * 16).toString(16)
         }
     }
-    data.hash = hash;
-    data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString();
-    return data;
+    data.hash = hash
+    data.startHash = hash
+    data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString()
+    return data
 }
 
 export class Random {
     constructor(tokenData) {
         this.tokenData = tokenData
+        this.compileHash()
+    }
+    compileHash() {
         this.useA = false;
         let sfc32 = function (uint128Hex) {
             let a = parseInt(uint128Hex.substr(0, 8), 16);
@@ -39,6 +43,11 @@ export class Random {
             this.prngA();
             this.prngB();
         }
+    }
+    // Experimental feature to start start hash
+    reninitHash() {
+        this.tokenData.hash = this.tokenData.startHash
+        this.compileHash()
     }
     // random number between 0 (inclusive) and 1 (exclusive)
     random_dec() {

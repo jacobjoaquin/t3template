@@ -1,3 +1,5 @@
+import * as THREE from "three"
+
 export class Model {
     constructor(parent, random) {
         this.parent = parent
@@ -6,12 +8,13 @@ export class Model {
         this.setBindings()
     }
 
-    // Populate data
+    // Populate default data
     setData() {
         this.data = {
             'rot x': 0,
             'rot y': 0,
             'rot z': 0,
+            'background': 0x111111
         }
     }
 
@@ -27,6 +30,9 @@ export class Model {
             'rot z': () => {
                 this.parent.torus.rotation.z = this.data['rot z']
             },
+            'background': () => {
+                this.parent.scene.background = new THREE.Color(this.data['background'])
+            }
         }
     }
 
