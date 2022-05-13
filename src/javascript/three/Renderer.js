@@ -1,8 +1,10 @@
 import * as THREE from "three"
-import { canvas, sizes } from "./Experience"
+// import { canvas, sizes } from "./Experience"
+import { Sketch } from "./Sketch"
 
 export class Renderer {
-  constructor() {
+  constructor(parent) {
+    this.parent = parent
     this.renderer
 
     this.setRenderer()
@@ -10,10 +12,10 @@ export class Renderer {
 
   setRenderer() {
     this.renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
+      canvas: this.parent.canvas,
       antialias: true,
     })
-    this.renderer.setSize(sizes.width, sizes.height)
+    this.renderer.setSize(this.parent.sizes.width, this.parent.sizes.height)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   }
 }

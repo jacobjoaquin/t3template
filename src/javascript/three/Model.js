@@ -3,6 +3,12 @@ import { torus } from './Experience'
 export class Model {
     constructor(random, actions) {
         this.random = random
+        this.setData()
+        this.setBindings()
+    }
+
+    // Populate data
+    setData() {
         this.data = {
             'rot x': this.random.random_num(0, Math.PI * 2),
             'rot y': this.random.random_num(0, Math.PI * 2),
@@ -10,8 +16,11 @@ export class Model {
             background: this.random.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
             color: this.random.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
         }
+    }
 
-        this.actions = {
+    // Define actions
+    setBindings() {
+        this.bindings = {
             'rot x': () => {
                 torus.rotation.x = this.data['rot x']
             },
@@ -24,14 +33,18 @@ export class Model {
         }
     }
 
-    update(parameter, value) {
+    // Update a parameter's value and optionally perform related action
+    update(parameter, value, action = true) {
         this.data[parameter] = value
-        this.actions[parameter]()
+        if (action && parameter in this.bindings) {
+            this.bindings[parameter]()
+        }
     }
 
+    // Refresh view with all actions
     refresh() {
-        for (const parameter in this.actions) {
-            this.actions[parameter]()
+        for (const parameter in this.bindings) {
+            this.bindings[parameter]()
         }
     }
 }
