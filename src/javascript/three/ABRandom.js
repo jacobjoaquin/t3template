@@ -1,25 +1,15 @@
-export function genTokenData(projectNum, seed=-1) {
+export function genTokenData(projectNum, hash) {
     let data = {};
-    let hash = "0x";
-    let h
-    if (seed < 0) {
-        h = Math.random()
-    } else {
-        h = seed / Number.MAX_SAFE_INTEGER
-    }
-    for (var i = 0; i < 64; i++) {
-        hash += Math.floor(h * 16).toString(16);
+    if (!hash) {
+        hash = "0x";
+        for (var i = 0; i < 64; i++) {
+            hash += Math.floor(Math.random() * 16).toString(16);
+        }
     }
     data.hash = hash;
-    if (seed < 0) {
-        data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString();
-    } else {
-        // TODO: Should use a second Math.random()?
-        data.tokenId = (projectNum * 1000000 + Math.floor(h * 1000)).toString();
-    }
+    data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString();
     return data;
 }
-
 
 export class Random {
     constructor(tokenData) {

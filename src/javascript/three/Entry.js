@@ -9,13 +9,14 @@ import Stats from "stats.js"
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const urlParamObj = {
-  seed: urlParams.get('seed')
+  hash: urlParams.get('hash')
 }
 
 // Setup Token and Random
 const projectNum = 123
-const seed = urlParamObj.seed ? urlParamObj.seed : -1
-const tokenData = genTokenData(projectNum, seed)
+const hash = urlParamObj.hash ? urlParamObj.hash : undefined
+const tokenData = genTokenData(projectNum, hash)
+console.log("hash: " + tokenData.hash)
 const random = new Random(tokenData)
 
 // Setup Sketch
@@ -39,4 +40,3 @@ const controllerAB = new ControllerAB(model, random)
 model.refresh()
 controller.updateFromModel()
 sketch.start()
-console.log(model.data)
