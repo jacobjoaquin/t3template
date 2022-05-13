@@ -1,7 +1,6 @@
-import { torus } from './Experience'
-
 export class Model {
-    constructor(random, actions) {
+    constructor(parent, random) {
+        this.parent = parent
         this.random = random
         this.setData()
         this.setBindings()
@@ -22,13 +21,13 @@ export class Model {
     setBindings() {
         this.bindings = {
             'rot x': () => {
-                torus.rotation.x = this.data['rot x']
+                this.parent.torus.rotation.x = this.data['rot x']
             },
             'rot y': () => {
-                torus.rotation.x = this.data['rot y']
+                this.parent.torus.rotation.y = this.data['rot y']
             },
             'rot z': () => {
-                torus.rotation.x = this.data['rot z']
+                this.parent.torus.rotation.z = this.data['rot z']
             },
         }
     }
