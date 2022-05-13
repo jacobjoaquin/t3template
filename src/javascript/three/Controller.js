@@ -63,5 +63,4 @@ export class Controller {
         //     console.log('Render Clicked')
         // });
     }
-
 }

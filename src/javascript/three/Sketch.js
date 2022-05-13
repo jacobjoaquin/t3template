@@ -1,22 +1,22 @@
 import * as THREE from "three"
 import Stats from "stats.js"
-
 import { Camera } from "./Camera"
 import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
+
 export class Sketch {
   constructor() {
-    this.init()
+    this.setup()
   }
 
-  init() {
+  setup() {
+    // Setup Stats
     this.stats = new Stats()
     this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(this.stats.dom)
 
     this.canvas = document.querySelector("canvas.webgl")
     this.scene = new THREE.Scene()
-    // this.loaders = new Loaders()
     this.sizes = new Sizes(this)
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
@@ -31,16 +31,19 @@ export class Sketch {
     this.scene.add(this.torus)
   }
 
-  play() {
-    this.tick()
+  draw() {
+    this.camera.controls.update()
+    this.renderer.renderer.render(this.scene, this.camera.camera)
   }
 
   tick() {
     this.stats.begin()
-
-    this.camera.controls.update()
-    this.renderer.renderer.render(this.scene, this.camera.camera)
+    this.draw()
     window.requestAnimationFrame(this.tick.bind(this))
     this.stats.end()
+  }
+
+  start() {
+    this.tick()
   }
 }

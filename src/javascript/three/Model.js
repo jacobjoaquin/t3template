@@ -33,9 +33,9 @@ export class Model {
     }
 
     // Update a parameter's value and optionally perform related action
-    update(parameter, value, action = true) {
+    update(parameter, value, runAction = true) {
         this.data[parameter] = value
-        if (action && parameter in this.bindings) {
+        if (runAction && parameter in this.bindings) {
             this.bindings[parameter]()
         }
     }
