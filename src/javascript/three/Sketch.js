@@ -14,13 +14,13 @@ export class Sketch {
     this.sizes = new Sizes(this)
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
-    this.scene.background = new THREE.Color(0x005599)
+    this.scene.background = new THREE.Color(0x000000)
     this.clock = new THREE.Clock()
 
     // Setup Torus
     this.torus = new THREE.Mesh(
       new THREE.TorusGeometry(1, 0.3, 20, 40),
-      new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+      new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
     )
     this.scene.add(this.torus)
   }

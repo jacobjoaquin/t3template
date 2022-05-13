@@ -30,37 +30,9 @@ export class Controller {
         }).on('change', (ev) => {
             this.model.update('rot z', ev.value)
         })
+    }
 
-
-        // // GenArray GUI
-        // const genArrayParams = {
-        //     projectNum: projectNum,
-        //     seed: urlParamObj.seed ? urlParamObj.seed : -1,
-        //     'iterations': 10,
-        //     go: 0
-        // }
-
-        // const genArrayFolder = pane.addFolder({
-        //     title: 'GenArray'
-        // })
-        // genArrayFolder.addBlade({
-        //     view: 'text',
-        //     label: 'project num',
-        //     parse: (v) => String(v),
-        //     value: projectNum,
-        // });
-        // genArrayFolder.addInput(genArrayParams, 'seed', {
-        //     format: (v) => v.toFixed()
-        // })
-        // genArrayFolder.addInput(genArrayParams, 'iterations', {
-        //     min: 1,
-        //     max: 100,
-        //     format: (v) => v.toFixed()
-        // })
-        // genArrayFolder.addButton({
-        //     title: 'Render',
-        // }).on('click', () => {
-        //     console.log('Render Clicked')
-        // });
+    updateFromModel() {
+        this.pane.importPreset(this.model.data)
     }
 }

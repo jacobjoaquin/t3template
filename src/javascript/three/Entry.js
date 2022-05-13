@@ -1,6 +1,7 @@
 import { Sketch } from "./Sketch"
 import { genTokenData, Random } from "./abRandom"
 import { Controller } from "./Controller"
+import { ControllerAB } from "./ControllerAB"
 import { Model } from "./Model"
 import Stats from "stats.js"
 
@@ -34,5 +35,8 @@ sketch.tickAfter = () => {
 // Setup Model and Controller
 const model = new Model(sketch, random)
 const controller = new Controller(model)
+const controllerAB = new ControllerAB(model, random)
 model.refresh()
+controller.updateFromModel()
 sketch.start()
+console.log(model.data)

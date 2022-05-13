@@ -9,11 +9,9 @@ export class Model {
     // Populate data
     setData() {
         this.data = {
-            'rot x': this.random.random_num(0, Math.PI * 2),
-            'rot y': this.random.random_num(0, Math.PI * 2),
-            'rot z': this.random.random_num(0, Math.PI * 2),
-            background: this.random.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
-            color: this.random.random_int(0, 0x1000000), // range [0, 0xFFFFFF]
+            'rot x': 0,
+            'rot y': 0,
+            'rot z': 0,
         }
     }
 
