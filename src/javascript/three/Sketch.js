@@ -1,5 +1,4 @@
 import * as THREE from "three"
-import Stats from "stats.js"
 import { Camera } from "./Camera"
 import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
@@ -10,11 +9,6 @@ export class Sketch {
   }
 
   setup() {
-    // Setup Stats
-    this.stats = new Stats()
-    this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild(this.stats.dom)
-
     this.canvas = document.querySelector("canvas.webgl")
     this.scene = new THREE.Scene()
     this.sizes = new Sizes(this)
@@ -37,13 +31,17 @@ export class Sketch {
   }
 
   tick() {
-    this.stats.begin()
+    this.tickBefore()
     this.draw()
     window.requestAnimationFrame(this.tick.bind(this))
-    this.stats.end()
+    this.tickAfter()
   }
 
   start() {
     this.tick()
   }
+
+  // Temporary hooks for tick(). Override these.
+  tickBefore() { }
+  tickAfter() { }
 }
