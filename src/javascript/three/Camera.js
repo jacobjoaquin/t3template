@@ -1,6 +1,5 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
-// import { canvas, scene, sizes } from "./Experience"
 
 export class Camera {
   constructor(parent) {

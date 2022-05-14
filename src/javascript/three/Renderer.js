@@ -1,6 +1,4 @@
 import * as THREE from "three"
-// import { canvas, sizes } from "./Experience"
-import { Sketch } from "./Sketch"
 
 export class Renderer {
   constructor(parent) {

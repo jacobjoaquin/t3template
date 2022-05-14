@@ -1,6 +1,3 @@
-// import { camera, renderer } from "./Experience"
-import { Sketch } from "./Sketch"
-
 export class Sizes {
   constructor(parent) {
     this.parent = parent
@@ -17,12 +14,12 @@ export class Sizes {
       this.height = window.innerHeight
 
       // Update camera
-      // camera.camera.aspect = this.width / this.height
-      // camera.camera.updateProjectionMatrix()
+      this.parent.camera.camera.aspect = this.width / this.height
+      this.parent.camera.camera.updateProjectionMatrix()
 
       // Update renderer
-      // renderer.renderer.setSize(this.width, this.height)
-      // renderer.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      this.parent.renderer.renderer.setSize(this.width, this.height)
+      this.parent.renderer.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     })
   }
 }

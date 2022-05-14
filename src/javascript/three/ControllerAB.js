@@ -11,15 +11,34 @@ export class ControllerAB {
     setupPresets() {
         this.presets = {
             default: {
-                'rot x': { func: this.random.random_num.bind(this.random), args: [0, Math.PI * 2] },
-                'rot y': { func: this.random.random_num.bind(this.random), args: [0, Math.PI * 2] },
-                'rot z': { func: this.random.random_num.bind(this.random), args: [0, Math.PI * 2] },
+                'rot x': {
+                    func: this.random.random_num.bind(this.random),
+                    args: [0, Math.PI * 2]
+                },
+                'rot y': {
+                    func: this.random.random_num.bind(this.random),
+                    args: [0, Math.PI * 2]
+                },
+                'rot z': {
+                    func: this.random.random_num.bind(this.random),
+                    args: [0, Math.PI * 2]
+                },
             },
             test: {
-                'rot x': { func: this.random.random_num.bind(this.random), args: [0, Math.PI * 2] },
-                'rot y': { func: this.random.random_dec.bind(this.random) },
+                'rot x': {
+                    func:
+                        this.random.random_num.bind(this.random),
+                    args: [0, Math.PI * 2]
+                },
+                'rot y': {
+                    func:
+                        this.random.random_dec.bind(this.random)
+                },
                 'rot z': Math.PI,
-                'background': { func: this.random.random_choice.bind(this.random), args: [[0x111111, 0x111144, 0x114411, 0x441111]] }
+                'background': {
+                    func: this.random.random_choice.bind(this.random),
+                    args: [[0x111111, 0x111144, 0x114411, 0x441111]]
+                }
             }
         }
     }
@@ -45,22 +64,3 @@ export class ControllerAB {
         this.generateModelData()
     }
 }
-
-/*
-
-sliders for random ranges
-model contains all the parameter data that affects the sketch
-
-
-ControllerAB
-    Set ranges for parameters
-    Randomly generate data
-    Sends data to model
-    Update Controller
-
-
-ControllerAB Creates a Tweakpane Folder
-Add Folder to Controller
-
-
-*/

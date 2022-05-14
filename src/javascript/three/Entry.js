@@ -14,7 +14,7 @@ const urlParamObj = {
 
 // Setup Token and Random
 const projectNum = 123
-const hash = urlParamObj.hash ? urlParamObj.hash : undefined
+const hash = urlParamObj.hash
 const tokenData = genTokenData(projectNum, hash)
 console.log("hash: " + tokenData.hash)
 const random = new Random(tokenData)
