@@ -20,7 +20,8 @@ console.log("hash: " + tokenData.hash)
 const random = new Random(tokenData)
 
 // Setup Sketch
-const sketch = new Sketch()
+const targetCanvas = document.querySelector("canvas.webgl")
+const sketch = new Sketch(targetCanvas)
 
 // Setup Stats
 const stats = new Stats()

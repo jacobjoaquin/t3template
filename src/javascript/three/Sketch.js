@@ -4,12 +4,13 @@ import { Renderer } from "./Renderer"
 import { Sizes } from "./Sizes"
 
 export class Sketch {
-  constructor() {
+  constructor(targetCanvas) {
+    this.targetCanvas = targetCanvas
     this.setup()
   }
 
   setup() {
-    this.canvas = document.querySelector("canvas.webgl")
+    this.canvas = this.targetCanvas
     this.scene = new THREE.Scene()
     this.sizes = new Sizes(this)
     this.camera = new Camera(this)
