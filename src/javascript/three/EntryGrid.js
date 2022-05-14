@@ -4,6 +4,14 @@ import { Controller } from "./Controller"
 import { ControllerAB } from "./ControllerAB"
 import { Model } from "./Model"
 
+function canvasToImgNode(canvas) {
+  const imgNode = new Image()
+  imgNode.src = canvas.toDataURL()
+  return imgNode
+}
+
+const nOutputs = 10
+
 // Setup URL Param
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -14,9 +22,8 @@ const urlParamObj = {
 // Remove original webgl container from DOM
 document.getElementById('webgl-container').remove()
 
-const nOutputs = 10
 
-// Create single sketch
+// Create single sketch (hidden)
 // Set preset
 // Loop
 //  Set hash
@@ -25,37 +32,44 @@ const nOutputs = 10
 //  Add image to grid
 
 
-// Setup Card DOM elements
+// Setup Sketch
+const container = document.createElement('div')
+container.className = 'grid-div'
+container.id = 'hidden-container'
+
+const canvas = document.createElement('canvas')
+canvas.className = 'webgl-grid'
+canvas.id = 'hidden-canvas'
+
+container.append(canvas)
+// document.body.append(container)
+
+const sketch = new Sketch(canvas)
+sketch.sizes.updateAll()
+
+// Setup Random
+const projectNum = 123
+const hash = urlParamObj.hash
+const tokenData = genTokenData(projectNum, hash)
+console.log("hash: " + tokenData.hash)
+const random = new Random(tokenData)
+
+// Setup Model and ControllerAB
+const model = new Model(sketch, random)
+const controllerAB = new ControllerAB(model, random)
+controllerAB.select('test')
+model.refresh()
+sketch.start()
+// sketch.drawFrame()
+
+
+// Create thumnails
 for (let i = 0; i < nOutputs; i++) {
-  // Setup DOM
-  var div = document.createElement('div')
+  const imgNode = canvasToImgNode(canvas)
+  imgNode.style.width = '200px'
+  imgNode.style.height = '200px'
+  const div = document.createElement('div')
   div.className = 'grid-div'
-  var canvas = document.createElement("canvas")
-  canvas.className = "webgl-grid"
-  canvas.id = "temp-" + i
   document.body.appendChild(div)
-  div.appendChild(canvas)
-}
-
-// Create Cards
-for (let i = 0; i < nOutputs; i++) {
-  var canvas = document.getElementById("temp-" + i)
-
-  // Setup Random
-  const projectNum = 123
-  const hash = urlParamObj.hash
-  const tokenData = genTokenData(projectNum, hash)
-  console.log("hash: " + tokenData.hash)
-  const random = new Random(tokenData)
-
-  // Setup Sketch
-  const sketch = new Sketch(canvas)
-  sketch.sizes.updateAll()
-
-  // Setup Model and ControllerAB
-  const model = new Model(sketch, random)
-  const controllerAB = new ControllerAB(model, random)
-  controllerAB.select('test')
-  model.refresh()
-  sketch.drawFrame()
+  div.appendChild(imgNode)
 }

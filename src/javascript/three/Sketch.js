@@ -7,6 +7,7 @@ export class Sketch {
   constructor(targetCanvas) {
     this.targetCanvas = targetCanvas
     this.setup()
+    this.imgNode
   }
 
   setup() {
