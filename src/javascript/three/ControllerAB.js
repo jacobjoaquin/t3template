@@ -28,7 +28,7 @@ export class ControllerAB {
                 'rot z': Math.PI,
                 'background': {
                     func: this.random.random_choice.bind(this.random),
-                    args: [[0x888800, 0x008888, 0x880088]]
+                    args: [[0xaaaa00, 0x00aaaa, 0xaa00aa]]
                 }
             }
         }

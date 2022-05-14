@@ -21,9 +21,9 @@ const random = new Random(tokenData)
 // Setup DOM
 document.getElementById('webgl-container').remove()
 var div = document.createElement('div')
-div.className = 'gridDiv'
+div.className = 'grid-div'
 var canvas = document.createElement("canvas")
-canvas.className  = "webglGrid"
+canvas.className  = "webgl-grid"
 canvas.id = "temp"
 document.body.appendChild(div)
 div.appendChild(canvas)
