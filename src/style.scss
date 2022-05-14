@@ -35,13 +35,11 @@ html, body {
 }
 
 .webglGrid {
-  position: fixed;
+  // position: fixed;
   left: 0;
   top: 0;
   z-index: 0;
   outline: none;
-  // width: 200px;
-  // height: 200px;
 }
 
 .gridDiv {
@@ -50,6 +48,6 @@ html, body {
   // top: 0;
   // z-index: 0;
   // outline: none;
-  width: 500px;
-  height: 500px;
+  width: 200px;
+  height: 200px;
 }

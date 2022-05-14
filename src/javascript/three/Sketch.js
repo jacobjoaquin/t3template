@@ -15,7 +15,7 @@ export class Sketch {
     this.sizes = new Sizes(this)
     this.camera = new Camera(this)
     this.renderer = new Renderer(this)
-    this.scene.background = new THREE.Color(0x000000)
+    this.scene.background = new THREE.Color(0x001111)
     this.clock = new THREE.Clock()
 
     // Setup Torus
@@ -31,10 +31,14 @@ export class Sketch {
     this.renderer.renderer.render(this.scene, this.camera.camera)
   }
 
+  drawFrame() {
+    requestAnimationFrame(this.draw.bind(this))
+  }
+
   tick() {
     this.tickBefore()
     this.draw()
-    window.requestAnimationFrame(this.tick.bind(this))
+    requestAnimationFrame(this.tick.bind(this))
     this.tickAfter()
   }
 

@@ -3,26 +3,17 @@ export class ControllerAB {
         this.model = model
         this.random = random
         this.setupPresets()
-        // this.current = this.presets.testStatic
-        this.current = this.presets.test
+        this.current = this.presets.default
         this.generateModelData()
     }
 
     setupPresets() {
         this.presets = {
             default: {
-                'rot x': {
-                    func: this.random.random_num.bind(this.random),
-                    args: [0, Math.PI * 2]
-                },
-                'rot y': {
-                    func: this.random.random_num.bind(this.random),
-                    args: [0, Math.PI * 2]
-                },
-                'rot z': {
-                    func: this.random.random_num.bind(this.random),
-                    args: [0, Math.PI * 2]
-                },
+                'rot x': 0,
+                'rot y': 0,
+                'rot z': 0,
+                'background': 0x111155
             },
             test: {
                 'rot x': {
@@ -37,7 +28,7 @@ export class ControllerAB {
                 'rot z': Math.PI,
                 'background': {
                     func: this.random.random_choice.bind(this.random),
-                    args: [[0x111111, 0x111144, 0x114411, 0x441111]]
+                    args: [[0x888800, 0x008888, 0x880088]]
                 }
             }
         }
@@ -60,7 +51,7 @@ export class ControllerAB {
 
     select(name) {
         this.current = this.presets[name]
-        this.random.reinitToken()
+        this.random.reninitHash()
         this.generateModelData()
     }
 }
