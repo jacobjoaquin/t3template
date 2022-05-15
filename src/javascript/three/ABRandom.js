@@ -43,14 +43,9 @@ export class Random {
             this.prngB();
         }
     }
-    // Experimental feature to start start hash
-    reninitHash() {
-        this.compileHash()
-    }
     generateNewToken() {
         const newToken = genTokenData(123, undefined)
         this.tokenData.hash = newToken.hash
-        console.log(newToken)
         this.tokenData.tokenId = newToken.tokenId
         this.compileHash()
     }

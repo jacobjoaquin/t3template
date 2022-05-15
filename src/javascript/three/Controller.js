@@ -1,8 +1,10 @@
 import { Pane } from 'tweakpane';
 
 export class Controller {
-    constructor(model) {
+    constructor(sketch, model, controllerAB) {
+        this.sketch = sketch
         this.model = model
+        this.controllerAB = controllerAB
         this.pane
         this.init()
     }
@@ -15,22 +17,36 @@ export class Controller {
             title: 'Sketch Properties'
         })
 
-        sketchPropertiesFolder.addBlade({
-            view: 'text',
-            label: 'hash',
-            parse: (v) => String(v),
-            value: this.model.random.tokenData.hash,
-        });
+        // sketchPropertiesFolder.addBlade({
+        //     view: 'text',
+        //     label: 'hash',
+        //     parse: (v) => String(v),
+        //     value: this.model.random.tokenData.hash,
+        // });
 
-        const btn = this.pane.addButton({
+        const sketchProperites = {
+            hash: this.model.random.tokenData.hash,
+        };
+
+        sketchPropertiesFolder.addInput(sketchProperites, 'hash',
+            {
+                presetKey: 'sketch_hash',
+            }
+        );
+
+
+        const btnRandomize = this.pane.addButton({
             title: 'Randomize',
-            // label: 'counter',   // optional
-          });
-          
-          btn.on('click', () => {
-            // count += 1;
-            // console.log(count);
-          });
+        });
+        btnRandomize.on('click', () => {
+            this.model.random.generateNewToken()
+            this.controllerAB.generateModelData()
+            this.model.refresh()
+            this.updateFromModel()
+            this.pane.importPreset({
+                sketch_hash: this.model.random.tokenData.hash
+            })
+        });
 
         // Model
         const modelFolder = this.pane.addFolder({

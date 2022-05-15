@@ -69,7 +69,7 @@ export class ControllerAB {
 
     select(name) {
         this.current = this.presets[name]
-        this.random.reninitHash()
+        this.random.compileHash()
         this.generateModelData()
     }
 }
