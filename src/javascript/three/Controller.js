@@ -10,29 +10,90 @@ export class Controller {
     init() {
         this.pane = new Pane()
 
-        this.pane.addInput(this.model.data, 'rot x', {
+        // Sketch Properties
+        const sketchPropertiesFolder = this.pane.addFolder({
+            title: 'Sketch Properties'
+        })
+
+        sketchPropertiesFolder.addBlade({
+            view: 'text',
+            label: 'hash',
+            parse: (v) => String(v),
+            value: this.model.random.tokenData.hash,
+        });
+
+        const btn = this.pane.addButton({
+            title: 'Randomize',
+            // label: 'counter',   // optional
+          });
+          
+          btn.on('click', () => {
+            // count += 1;
+            // console.log(count);
+          });
+
+        // Model
+        const modelFolder = this.pane.addFolder({
+            title: 'Model'
+        })
+
+        modelFolder.addInput(this.model.data, 'rot x', {
             min: 0,
             max: Math.PI * 2
         }).on('change', (ev) => {
             this.model.update('rot x', ev.value)
         })
 
-        this.pane.addInput(this.model.data, 'rot y', {
+        modelFolder.addInput(this.model.data, 'rot y', {
             min: 0,
             max: Math.PI * 2
         }).on('change', (ev) => {
             this.model.update('rot y', ev.value)
         })
 
-        this.pane.addInput(this.model.data, 'rot z', {
+        modelFolder.addInput(this.model.data, 'rot z', {
             min: 0,
             max: Math.PI * 2
         }).on('change', (ev) => {
             this.model.update('rot z', ev.value)
         })
 
+        // Preset
+        const presetFolder = this.pane.addFolder({
+            title: 'Preset'
+        })
+
+        // GenArray
+        const genArrayParams = {
+            projectNum: 123,
+            hash: 0,
+            'iterations': 10,
+            go: 0
+        }
+
+        const genArrayFolder = this.pane.addFolder({
+            title: 'GenArray'
+        })
+        // genArrayFolder.addBlade({
+        //     view: 'text',
+        //     label: 'project num',
+        //     parse: (v) => String(v),
+        //     value: 123,
+        // });
+        genArrayFolder.addInput(genArrayParams, 'iterations', {
+            min: 1,
+            max: 100,
+            presetKey: 'genArray_iterations',
+            format: (v) => v.toFixed()
+        })
+        genArrayFolder.addButton({
+            title: 'Render',
+        }).on('click', () => {
+            console.log('Render Clicked')
+        });
+
         const preset = this.pane.exportPreset();
-        console.log(preset);
+        console.log(preset)
     }
 
     updateFromModel() {

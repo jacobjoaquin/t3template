@@ -38,6 +38,7 @@ sketch.tickAfter = () => {
 const model = new Model(sketch, random)
 const controller = new Controller(model)
 const controllerAB = new ControllerAB(model, random)
+controllerAB.select('thumbnail_test')
 model.refresh()
 controller.updateFromModel()
 sketch.start()
