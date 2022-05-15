@@ -1,7 +1,7 @@
 import { Sketch } from "./Sketch"
 import { genTokenData, Random } from "./abRandom"
 import { Controller } from "./Controller"
-import { ControllerAB } from "./ControllerAB"
+import { Presets } from "./Presets"
 import { Model } from "./Model"
 import Stats from "stats.js"
 
@@ -36,7 +36,7 @@ sketch.tickAfter = () => {
 
 // Setup Model and Controller
 const model = new Model(sketch, random)
-const controllerAB = new ControllerAB(model, random)
+const controllerAB = new Presets(model, random)
 const controller = new Controller(sketch, model, controllerAB)
 controllerAB.select('thumbnail_test')
 model.refresh()

@@ -1,4 +1,4 @@
-export class ControllerAB {
+export class Presets {
     constructor(model, random) {
         this.model = model
         this.random = random
