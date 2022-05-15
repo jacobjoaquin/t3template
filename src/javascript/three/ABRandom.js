@@ -7,7 +7,6 @@ export function genTokenData(projectNum, hash) {
         }
     }
     data.hash = hash
-    data.startHash = hash
     data.tokenId = (projectNum * 1000000 + Math.floor(Math.random() * 1000)).toString()
     return data
 }
@@ -46,7 +45,13 @@ export class Random {
     }
     // Experimental feature to start start hash
     reninitHash() {
-        this.tokenData.hash = this.tokenData.startHash
+        this.compileHash()
+    }
+    generateNewToken() {
+        const newToken = genTokenData(123, undefined)
+        this.tokenData.hash = newToken.hash
+        console.log(newToken)
+        this.tokenData.tokenId = newToken.tokenId
         this.compileHash()
     }
     // random number between 0 (inclusive) and 1 (exclusive)
