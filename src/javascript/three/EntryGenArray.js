@@ -12,6 +12,7 @@ const dimensions = {
 const webgl = document.getElementById('webgl-container')
 const grid = document.createElement('div')
 document.body.append(grid)
+
 function showWebgl() {
   webgl.style.display = 'block'
   grid.style.display = 'none'
@@ -34,7 +35,7 @@ function addGenArrayToController(controller) {
   const genArrayParams = {
     projectNum: 123,
     hash: 0,
-    'iterations': 5,
+    'iterations': 20,
     go: 0
   }
 
@@ -64,17 +65,20 @@ function addGenArrayToController(controller) {
   });
 }
 
+let sketch
+let sketchData
+
 // ThreeJS Running Sketch
-function loadSketch() {
+function loadSketch(hash) {
   // Setup Token and Random
   const projectNum = 123
-  const tokenData = genTokenData(projectNum)
+  const tokenData = genTokenData(projectNum, hash)
   console.log("hash: " + tokenData.hash)
   const random = new Random(tokenData)
 
   // Setup Sketch
   const targetCanvas = document.querySelector("canvas.webgl")
-  const sketch = new Sketch(targetCanvas)
+  sketch = new Sketch(targetCanvas)
 
   // Setup Model and Controller
   const model = new Model(sketch, random)
@@ -85,6 +89,10 @@ function loadSketch() {
   model.refresh()
   controller.updateFromModel()
   sketch.start()
+  sketchData = {
+    model: model,
+    random: random,
+  }
 }
 
 // Setup Sketch
@@ -100,7 +108,7 @@ function generateThumbnail(presetData) {
   document.body.append(container)
 
   // Create Sketch
-  let sketch = new Sketch(canvas)
+  const sketch = new Sketch(canvas)
 
   // Force cards to be of certain size
   sketch.sizes.updateDimensions = () => {
@@ -134,18 +142,14 @@ function generateThumbnail(presetData) {
       func: random.random_num.bind(random),
       args: [presetData['preset_rot z'].min, presetData['preset_rot z'].max]
     },
-    'background': {
-        func: random.random_choice.bind(random),
-        args: [['#aaaa00', '#00aaaa', '#aa00aa']]
-    }
+    // 'background': {
+    //     func: random.random_choice.bind(random),
+    //     args: [['#aaaa00', '#00aaaa', '#aa00aa']]
+    // }
   }
 
   presets.presets['guiPresetController'] = guiPresetController
   presets.select('guiPresetController')
-
-
-
-
   model.refresh()
   sketch.drawFrame()
 
@@ -159,18 +163,27 @@ function generateThumbnail(presetData) {
     imgNode.style.width = dimensions.width + 'px'
     imgNode.style.height = dimensions.height + 'px'
     div.appendChild(imgNode)
+
+    imgNode.onclick = () => {
+      console.log('hi')
+      // loadSketch(random.tokenData.hash)
+      console.log(random.tokenData.hash)
+      sketchData.random.hash = random.tokenData.hash
+      random.compileHash()
+      model.refresh()
+
+      showWebgl()
+      // Don't update presets
+    }
+
     canvas.remove()
     container.remove()
   })
 }
 
+function updateSketch() {
 
-// Create outputs
-// const nOutputs = 3
-// for (let i = 0; i < nOutputs; i++) {
-//   setTimeout(generateThumbnail, i * 20)
-// }
-
+}
 
 loadSketch()
 // showGrid()
