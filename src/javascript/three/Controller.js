@@ -64,6 +64,19 @@ export class Controller {
             }
         );
 
+        const btnRedraw = this.pane.addButton({
+            title: 'Redraw',
+        });
+        btnRedraw.on('click', () => {
+            this.randomizeWithPreset()
+            this.model.refresh()
+            this.updateFromModel()
+            this.pane.importPreset({
+                sketch_hash: this.model.random.tokenData.hash
+            })
+        });
+
+
         const btnRandomize = this.pane.addButton({
             title: 'Randomize',
         });
@@ -113,7 +126,6 @@ export class Controller {
             title: 'Presets'
         })
 
-        // Interval
         const presetParams = {
             'rot x': { min: 0, max: Math.PI * 2 },
             'rot y': { min: 0, max: Math.PI * 2 },
