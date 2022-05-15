@@ -1,7 +1,7 @@
 import { Sketch } from "./Sketch"
 import { genTokenData, Random } from "./abRandom"
 import { Controller } from "./Controller"
-import { ControllerAB } from "./ControllerAB"
+import { Presets } from "./Presets"
 import { Model } from "./Model"
 
 const nOutputs = 16
@@ -48,10 +48,10 @@ function generateThumbnail() {
   console.log("hash: " + tokenData.hash)
   const random = new Random(tokenData)
 
-  // Setup Model and ControllerAB
+  // Setup Model and Presets
   const model = new Model(sketch, random)
-  const controllerAB = new ControllerAB(model, random)
-  controllerAB.select('thumbnail_test')
+  const presets = new Presets(model, random)
+  presets.select('thumbnail_test')
   model.refresh()
   sketch.drawFrame()
 
