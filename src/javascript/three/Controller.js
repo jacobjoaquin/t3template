@@ -16,7 +16,7 @@ export class Controller {
         this.addSketchProperties()
         this.addModel()
         this.addPresets()
-        this.addGenArray()
+        // this.addGenArray()
         const preset = this.pane.exportPreset();
         console.log(preset)
 
@@ -170,7 +170,6 @@ export class Controller {
         }).on('click', () => {
             console.log('Render Clicked')
         });
-
     }
 
     updateFromModel() {
