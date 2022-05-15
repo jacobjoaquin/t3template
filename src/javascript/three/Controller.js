@@ -30,6 +30,9 @@ export class Controller {
         }).on('change', (ev) => {
             this.model.update('rot z', ev.value)
         })
+
+        const preset = this.pane.exportPreset();
+        console.log(preset);
     }
 
     updateFromModel() {

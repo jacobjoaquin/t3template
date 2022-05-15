@@ -3,23 +3,20 @@ export class Sizes {
     this.parent = parent
     this.canvas = this.parent.canvas
     this.container = this.canvas.parentElement
+    this.width
+    this.height
     this.updateDimensions()
     this.addListener()
   }
 
   updateDimensions() {
-    // const foo = getComputedStyle(this.canvas)
-    // this.width = this.container.clientWidth
-    // this.height = this.container.clientWidth
-    this.width = 200
-    this.height = 200
-    // console.log(foo)
-    // console.log(this.width + ", " + this.height)
+    this.width = window.innerWidth
+    this.height = window.innerHeight
   }
 
   updateAll() {
     this.updateDimensions()
-
+    
     // Update camera
     this.parent.camera.camera.aspect = this.width / this.height
     this.parent.camera.camera.updateProjectionMatrix()

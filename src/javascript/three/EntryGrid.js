@@ -4,6 +4,11 @@ import { Controller } from "./Controller"
 import { ControllerAB } from "./ControllerAB"
 import { Model } from "./Model"
 
+const nOutputs = 16
+const dimensions = {
+  width: 200,
+  height: 200
+}
 
 function canvasToImgNode(canvas) {
   const imgNode = new Image()
@@ -30,6 +35,13 @@ function generateThumbnail() {
   // Create Sketch
   let sketch = new Sketch(canvas)
 
+  // Force cards to be of certain size
+  sketch.sizes.updateDimensions = () => {
+    sketch.sizes.width = dimensions.width
+    sketch.sizes.height = dimensions.height
+  }
+  sketch.sizes.updateAll()
+
   // Setup Random
   const projectNum = 123
   const tokenData = genTokenData(projectNum)
@@ -49,8 +61,8 @@ function generateThumbnail() {
     div.className = 'grid-div'
     document.body.appendChild(div)
     const imgNode = canvasToImgNode(canvas)
-    imgNode.style.width = '200px'
-    imgNode.style.height = '200px'
+    imgNode.style.width = dimensions.width + 'px'
+    imgNode.style.height = dimensions.height + 'px'
     div.appendChild(imgNode)
     canvas.remove()
     container.remove()
@@ -58,7 +70,6 @@ function generateThumbnail() {
 }
 
 // Create outputs
-const nOutputs = 100
 for (let i = 0; i < nOutputs; i++) {
   setTimeout(generateThumbnail, i * 20)
 }
