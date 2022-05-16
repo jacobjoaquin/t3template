@@ -26,10 +26,10 @@ export class Presets {
                         this.random.random_dec.bind(this.random)
                 },
                 'rot z': Math.PI,
-                'background': {
-                    func: this.random.random_choice.bind(this.random),
-                    args: [[0xaaaa00, 0x00aaaa, 0xaa00aa]]
-                }
+                // 'background': {
+                //     func: this.random.random_choice.bind(this.random),
+                //     args: [[0xaaaa00, 0x00aaaa, 0xaa00aa]]
+                // }
             },
             thumbnail_test: {
                 'rot x': {
@@ -44,10 +44,10 @@ export class Presets {
                     func: this.random.random_num.bind(this.random),
                     args: [0, Math.PI * 2]
                 },
-                'background': {
-                    func: this.random.random_choice.bind(this.random),
-                    args: [['#000000', '#1d0100', '#7e0e00', '#ba2001', '#e04f00', '#ec7d01', '#eeb300', '#eccf0d', '#cfe243', '#ace071', '#a0db82', '#a2c38e', '#8eaa81', '#6c846c', '#445753', '#273342', '#0a0f2d']]
-                }
+                // 'background': {
+                //     func: this.random.random_choice.bind(this.random),
+                //     args: [['#000000', '#1d0100', '#7e0e00', '#ba2001', '#e04f00', '#ec7d01', '#eeb300', '#eccf0d', '#cfe243', '#ace071', '#a0db82', '#a2c38e', '#8eaa81', '#6c846c', '#445753', '#273342', '#0a0f2d']]
+                // }
             },
         }
     }

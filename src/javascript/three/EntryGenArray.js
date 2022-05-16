@@ -11,8 +11,7 @@ function addGenArrayToController(controller) {
   const genArrayParams = {
     projectNum: 123,
     hash: 0,
-    'iterations': 20,
-    go: 0
+    'iterations': 5,
   }
 
   const genArrayFolder = controller.pane.addFolder({
@@ -30,12 +29,12 @@ function addGenArrayToController(controller) {
     const presets = controller.pane.exportPreset()
     grid.innerHTML = ''
     sketchDev.hide()
+    grid.style.display = 'block'
 
     const nOutputs = presets.genArray_iterations
     for (let i = 0; i < nOutputs; i++) {
       setTimeout(() => {
-      sketchThumbnailGenerator.generate(presets)
-// generateThumbnail(presets)
+        sketchThumbnailGenerator.generate(presets)
       }, i * 50)
     }
   });
@@ -61,7 +60,7 @@ class SketchDev {
   }
 
   show() {
-    this.domElement.style.parentElement.display = 'block'
+    this.domElement.parentElement.style.display = 'block'
   }
 
   setupRandom(hash) {
@@ -71,10 +70,34 @@ class SketchDev {
   }
 
   reinit() {
-    // Dispose of sketch
-    // Create new Sketch
-    // Use same random, model, presets, controller, etc...
-    // Reset random
+    // Delete existing canvas
+    const parent = this.domElement.parentElement
+    parent.innerHTML = ''
+
+    // Create new canvas
+    const newCanvas = document.createElement('canvas')
+    newCanvas.className = 'webgl'
+    this.domElement = newCanvas
+    parent.append(newCanvas)
+
+    // Create new sketch
+    this.sketch = new Sketch(this.domElement)
+
+    // Update components to point to new sketch
+    this.model.parent = this.sketch
+    this.model.setBindings()
+    this.controller.sketch = this.sketch
+    console.log('reinit:' + this.random.tokenData.hash)
+    this.random.compileHash()
+
+    this.presets.select('guiPresetController')
+    this.controller.randomizeWithPreset()
+    // this.model.refresh()
+    // this.updateFromModel()
+
+    this.model.refresh()
+    this.controller.updateFromModel()
+    this.sketch.start()
   }
 }
 
@@ -145,23 +168,23 @@ class SketchThumbnailGenerator {
       div.appendChild(imgNode)
       this.domElement.append(div)
 
-      // imgNode.onclick = () => {
-      //   console.log('hi')
-      //   // loadSketch(random.tokenData.hash)
-      //   console.log(random.tokenData.hash)
-      //   sketchData.random.hash = random.tokenData.hash
-      //   random.compileHash()
-      //   model.refresh()
+      imgNode.onclick = () => {
+        grid.style.display = 'none'
+        sketchDev.show()
+        console.log(random.tokenData.hash)
+        sketchDev.random.generateNewToken(random.tokenData.hash)
+        sketchDev.reinit()
+        // presets.select(guiPresetController)
+        // model.refresh()
 
-      //   showWebgl()
-      //   // Don't update presets
-      // }
+        //   showWebgl()
+        //   // Don't update presets
+      }
 
       this.canvas.remove()
       this.canvasContainer.remove()
     })
   }
-
 }
 
 
@@ -171,10 +194,13 @@ const webglContainer = document.getElementById('webgl-container')
 const webgl = document.querySelector("canvas.webgl")
 const sketchDev = new SketchDev(webgl)
 
+// sketchDev.reinit()
+
 // Setup GenArray Component
 const grid = document.createElement('div')
+grid.style.display = 'none'
 document.body.append(grid)
 const sketchThumbnailGenerator = new SketchThumbnailGenerator(grid)
-
-// Add GenArray Panel to Controller
+sketchThumbnailGenerator.presets = sketchDev.presets
+// // Add GenArray Panel to Controller
 addGenArrayToController(sketchDev.controller)

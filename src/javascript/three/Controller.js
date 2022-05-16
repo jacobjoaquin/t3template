@@ -38,10 +38,10 @@ export class Controller {
                 func: this.model.random.random_num.bind(this.model.random),
                 args: [data['preset_rot z'].min, data['preset_rot z'].max]
             },
-            'background': {
-                func: this.model.random.random_choice.bind(this.model.random),
-                args: [['#aaaa00', '#00aaaa', '#aa00aa']]
-            }
+            // 'background': {
+            //     func: this.model.random.random_choice.bind(this.model.random),
+            //     args: [['#aaaa00', '#00aaaa', '#aa00aa']]
+            // }
         }
 
         this.controllerAB.presets['guiPresetController'] = guiPresetController

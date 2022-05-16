@@ -43,8 +43,9 @@ export class Random {
             this.prngB();
         }
     }
-    generateNewToken() {
-        const newToken = genTokenData(123, undefined)
+    generateNewToken(hash) {
+        console.log('genNewToken:' + hash)
+        const newToken = genTokenData(123, hash)
         this.tokenData.hash = newToken.hash
         this.tokenData.tokenId = newToken.tokenId
         this.compileHash()
