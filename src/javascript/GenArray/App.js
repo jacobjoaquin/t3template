@@ -27,10 +27,9 @@ function addGenArrayToController(controller) {
     title: 'Render',
   }).on('click', () => {
     const presets = controller.pane.exportPreset()
-    grid.innerHTML = ''
-    sketchManager.hide()
-    grid.style.display = 'block'
-
+    dpaViewMulti.innerHTML = ''
+    dpaViewSingle.style.display = 'none'
+    dpaViewMulti.style.display = 'block'
     const nOutputs = presets.genArray_iterations
 
     // FIXME: Rewrite for better asynchronous looping.
@@ -78,27 +77,46 @@ class SketchThumbnailGenerator {
     const presets = new Presets(model, random)
 
     // TODO: Redefining this here isn't necessary.
-    const guiPresetController = {
-      'rot x': {
+    // const guiPresetController = {
+    //   'rot x': {
+    //     func: random.random_num.bind(random),
+    //     args: [presetData['preset_rot x'].min, presetData['preset_rot x'].max]
+    //   },
+    //   'rot y': {
+    //     func: random.random_num.bind(random),
+    //     args: [presetData['preset_rot y'].min, presetData['preset_rot y'].max]
+    //   },
+    //   'rot z': {
+    //     func: random.random_num.bind(random),
+    //     args: [presetData['preset_rot z'].min, presetData['preset_rot z'].max]
+    //   },
+    //   // 'background': {
+    //   //     func: random.random_choice.bind(random),
+    //   //     args: [['#aaaa00', '#00aaaa', '#aa00aa']]
+    //   // }
+    // }
+
+    // presets.presets['guiPresetController'] = guiPresetController
+    // presets.select('guiPresetController')
+
+    // TODO: Must place presetParams somehwere
+    const controllerNames = Object.keys(sketchManager.controller.presetParams)
+    return
+    const guiPresetController = {}
+
+    for (const cn of controllerNames) {
+      const key = 'preset_' + cn
+
+      guiPresetController[cn] = {
         func: random.random_num.bind(random),
-        args: [presetData['preset_rot x'].min, presetData['preset_rot x'].max]
-      },
-      'rot y': {
-        func: random.random_num.bind(random),
-        args: [presetData['preset_rot y'].min, presetData['preset_rot y'].max]
-      },
-      'rot z': {
-        func: random.random_num.bind(random),
-        args: [presetData['preset_rot z'].min, presetData['preset_rot z'].max]
-      },
-      // 'background': {
-      //     func: random.random_choice.bind(random),
-      //     args: [['#aaaa00', '#00aaaa', '#aa00aa']]
-      // }
+        args: [data[key].min, data[key].max]
+      }
     }
 
     presets.presets['guiPresetController'] = guiPresetController
     presets.select('guiPresetController')
+
+  
     model.refresh()
 
     // FIXME: Doesn't work with asynchronous loading of assets such as images.
@@ -134,40 +152,23 @@ class SketchThumbnailGenerator {
 }
 
 
-
-// Setup SketchDev Component
-// const webglContainer = document.getElementById('webgl-container')
-// const webgl = document.querySelector("canvas.webgl")
-// const sketchManager = new SketchManager(webgl)
-
-// // sketchDev.reinit()
-
-// // Setup GenArray Component
-// const grid = document.createElement('div')
-// grid.style.display = 'none'
-// document.body.append(grid)
-// const sketchThumbnailGenerator = new SketchThumbnailGenerator(grid)
-// sketchThumbnailGenerator.presets = sketchDev.presets
-// // // Add GenArray Panel to Controller
-// addGenArrayToController(sketchDev.controller)
-
 // Create DOM for App
 document.body.innerHTML = ''
 const dpaApp = document.createElement('div')
 dpaApp.id = 'dpa-app'
 document.body.innerHTML = ''
-
 const dpaViewSingle = document.createElement('div')
 dpaViewSingle.id = 'dpa-view-single'
 const dpaViewMulti = document.createElement('div')
 dpaViewMulti.id = 'dpa-view-multi'
 dpaViewMulti.style.display = 'none'
-
 dpaApp.append(dpaViewSingle)
 dpaApp.append(dpaViewMulti)
 document.body.append(dpaApp)
 
-// Setup App DOM
+// Create and Start App Components
 const sketchManager = new SketchManager(dpaViewSingle)
+const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti)
+addGenArrayToController(sketchManager.controller)
 sketchManager.init()
 sketchManager.start()
