@@ -9,6 +9,11 @@ export class Controller {
         this.presets = presets
         this.pane
 
+        // TODO: Eventually there will be more than just interval sliders.
+        //       This will require creating presetParams with properties such as "color".
+        //       Instead of handcoding these objects, use a set of functions.
+        //       ie:
+        //            addSlider(target, 'name', min=0, max=1, step=0.1, presetKey=null, etc...)
         this.presetParams = {
             'rot x': { min: 0, max: TAU },
             'rot y': { min: 0, max: TAU },
@@ -104,32 +109,16 @@ export class Controller {
             title: 'Model'
         })
 
-        folder
-            .addInput(this.model.data, 'rot x', {
-                min: 0,
-                max: TAU
-            })
-            .on('change', (ev) => {
-                this.model.update('rot x', ev.value)
-            })
-
-        folder
-            .addInput(this.model.data, 'rot y', {
-                min: 0,
-                max: TAU
-            })
-            .on('change', (ev) => {
-                this.model.update('rot y', ev.value)
-            })
-
-        folder
-            .addInput(this.model.data, 'rot z', {
-                min: 0,
-                max: TAU
-            })
-            .on('change', (ev) => {
-                this.model.update('rot z', ev.value)
-            })
+        for (const k in this.presetParams) {
+            folder
+                .addInput(this.model.data, k, {
+                    min: this.presetParams[k].min,
+                    max: this.presetParams[k].max,
+                })
+                .on('change', (ev) => {
+                    this.model.update(k, ev.value)
+                })
+        }
     }
 
     addPresets() {
@@ -139,8 +128,8 @@ export class Controller {
 
         for (const k in this.presetParams) {
             folder.addInput(this.presetParams, k, {
-                min: 0,
-                max: Math.PI * 2,
+                min: this.presetParams[k].min,
+                max: this.presetParams[k].max,
                 presetKey: 'preset_' + k,
             })
         }
