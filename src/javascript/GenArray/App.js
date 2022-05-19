@@ -1,8 +1,8 @@
-import { Sketch } from "./Sketch"
-import { genTokenData, Random } from "./abRandom"
-import { Controller } from "./Controller"
-import { Presets } from "./Presets"
-import { Model } from "./Model"
+import { Sketch } from "../three/Sketch"
+import { genTokenData, Random } from "../three/abRandom"
+import { Controller } from "../three/Controller"
+import { Presets } from "../three/Presets"
+import { Model } from "../three/Model"
 import { canvasToImgNode } from "../Util"
 
 
