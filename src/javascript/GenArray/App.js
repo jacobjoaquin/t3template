@@ -4,7 +4,7 @@ import { Controller } from "../three/Controller"
 import { Presets } from "../three/Presets"
 import { Model } from "../three/Model"
 import { canvasToImgNode } from "../Util"
-
+import { SketchManager } from "./SketchManager"
 
 function addGenArrayToController(controller) {
   // GenArray
@@ -28,7 +28,7 @@ function addGenArrayToController(controller) {
   }).on('click', () => {
     const presets = controller.pane.exportPreset()
     grid.innerHTML = ''
-    sketchDev.hide()
+    sketchManager.hide()
     grid.style.display = 'block'
 
     const nOutputs = presets.genArray_iterations
@@ -42,67 +42,6 @@ function addGenArrayToController(controller) {
       }, i * 50)
     }
   });
-}
-
-class SketchDev {
-  constructor(domElement, hash = undefined) {
-    this.domElement = domElement
-    this.sketch = new Sketch(this.domElement)
-    this.setupRandom(hash)
-    this.model = new Model(this.sketch, this.random)
-    this.presets = new Presets(this.model, this.random)
-    this.controller = new Controller(this.sketch, this.model, this.presets)
-    this.presets.select('thumbnail_test')
-    this.model.refresh()
-    this.controller.updateFromModel()
-    this.sketch.start()
-  }
-
-  hide() {
-    // TODO: Better handle parent container
-    this.domElement.parentElement.style.display = 'none'
-  }
-
-  show() {
-    this.domElement.parentElement.style.display = 'block'
-  }
-
-  setupRandom(hash) {
-    const projectNum = 123
-    const tokenData = genTokenData(projectNum, hash)
-    this.random = new Random(tokenData)
-  }
-
-  reinit() {
-    // Delete existing canvas
-    const parent = this.domElement.parentElement
-    parent.innerHTML = ''
-
-    // Create new canvas
-    const newCanvas = document.createElement('canvas')
-    newCanvas.className = 'webgl'
-    this.domElement = newCanvas
-    parent.append(newCanvas)
-
-    // Create new sketch
-    this.sketch = new Sketch(this.domElement)
-
-    // Update components to point to new sketch
-    this.model.parent = this.sketch
-    this.model.setBindings()
-    this.controller.sketch = this.sketch
-    console.log('reinit:' + this.random.tokenData.hash)
-    this.random.compileHash()
-
-    this.presets.select('guiPresetController')
-    this.controller.randomizeWithPreset()
-    // this.model.refresh()
-    // this.updateFromModel()
-
-    this.model.refresh()
-    this.controller.updateFromModel()
-    this.sketch.start()
-  }
 }
 
 
@@ -177,10 +116,10 @@ class SketchThumbnailGenerator {
 
       imgNode.onclick = () => {
         grid.style.display = 'none'
-        sketchDev.show()
+        sketchManager.show()
         console.log(random.tokenData.hash)
-        sketchDev.random.generateNewToken(random.tokenData.hash)
-        sketchDev.reinit()
+        sketchManager.random.generateNewToken(random.tokenData.hash)
+        sketchManager.init()
         // presets.select(guiPresetController)
         // model.refresh()
 
@@ -197,17 +136,38 @@ class SketchThumbnailGenerator {
 
 
 // Setup SketchDev Component
-const webglContainer = document.getElementById('webgl-container')
-const webgl = document.querySelector("canvas.webgl")
-const sketchDev = new SketchDev(webgl)
+// const webglContainer = document.getElementById('webgl-container')
+// const webgl = document.querySelector("canvas.webgl")
+// const sketchManager = new SketchManager(webgl)
 
-// sketchDev.reinit()
+// // sketchDev.reinit()
 
-// Setup GenArray Component
-const grid = document.createElement('div')
-grid.style.display = 'none'
-document.body.append(grid)
-const sketchThumbnailGenerator = new SketchThumbnailGenerator(grid)
-sketchThumbnailGenerator.presets = sketchDev.presets
-// // Add GenArray Panel to Controller
-addGenArrayToController(sketchDev.controller)
+// // Setup GenArray Component
+// const grid = document.createElement('div')
+// grid.style.display = 'none'
+// document.body.append(grid)
+// const sketchThumbnailGenerator = new SketchThumbnailGenerator(grid)
+// sketchThumbnailGenerator.presets = sketchDev.presets
+// // // Add GenArray Panel to Controller
+// addGenArrayToController(sketchDev.controller)
+
+// Create DOM for App
+document.body.innerHTML = ''
+const dpaApp = document.createElement('div')
+dpaApp.id = 'dpa-app'
+document.body.innerHTML = ''
+
+const dpaViewSingle = document.createElement('div')
+dpaViewSingle.id = 'dpa-view-single'
+const dpaViewMulti = document.createElement('div')
+dpaViewMulti.id = 'dpa-view-multi'
+dpaViewMulti.style.display = 'none'
+
+dpaApp.append(dpaViewSingle)
+dpaApp.append(dpaViewMulti)
+document.body.append(dpaApp)
+
+// Setup App DOM
+const sketchManager = new SketchManager(dpaViewSingle)
+sketchManager.init()
+sketchManager.start()
