@@ -32,6 +32,10 @@ function addGenArrayToController(controller) {
     grid.style.display = 'block'
 
     const nOutputs = presets.genArray_iterations
+
+    // FIXME: Rewrite for better asynchronous looping.
+    //       One loop should execute at a time.
+    //       When compeleted, if there ungenerated thumbnails, generate thumbnail
     for (let i = 0; i < nOutputs; i++) {
       setTimeout(() => {
         sketchThumbnailGenerator.generate(presets)
@@ -134,6 +138,7 @@ class SketchThumbnailGenerator {
     const model = new Model(sketch, random)
     const presets = new Presets(model, random)
 
+    // TODO: Redefining this here isn't necessary.
     const guiPresetController = {
       'rot x': {
         func: random.random_num.bind(random),
@@ -156,6 +161,8 @@ class SketchThumbnailGenerator {
     presets.presets['guiPresetController'] = guiPresetController
     presets.select('guiPresetController')
     model.refresh()
+
+    // FIXME: Doesn't work with asynchronous loading of assets such as images.
     sketch.drawFrame()
 
     requestAnimationFrame(() => {

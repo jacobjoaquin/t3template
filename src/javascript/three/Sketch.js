@@ -7,6 +7,14 @@ export class Sketch {
   constructor(targetCanvas) {
     this.targetCanvas = targetCanvas
     this.setup()
+
+    // TODO: Update to call setup by App directly to allow model data to be generated
+    //       before the call to setup.
+    // How to use:
+    //   Generate data in model
+    //   Push model data to this.data
+    //   Call sketch.setup() in App
+
   }
 
   setup() {
