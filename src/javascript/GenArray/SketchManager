@@ -47,7 +47,7 @@ export class SketchManager {
   }
 
   // Creates a new sketch and updates existing components to point to new sketch.
-  init() {
+  init(autostart = false) {
     this.createCanvas()
     this.sketch = new Sketch(this.canvas)
     this.model.parent = this.sketch
@@ -57,6 +57,10 @@ export class SketchManager {
     this.controller.randomizeWithPreset()
     this.model.refresh()
     this.controller.updateFromModel()
+
+    if (autostart) {
+      this.start()
+    }
   }
 
   start() {

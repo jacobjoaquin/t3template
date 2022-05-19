@@ -1,0 +1,109 @@
+import { Sketch } from "../three/Sketch"
+import { genTokenData, Random } from "../three/abRandom"
+import { Presets } from "../three/Presets"
+import { Model } from "../three/Model"
+import { GenArrayDelays } from "./App"
+
+
+export class SketchThumbnailGenerator {
+  domElement
+  width
+  height
+  canvasContainer
+  canvas
+  sketchManager
+  data
+
+  constructor(domElement, sketchManager, width = 200, height = 200) {
+    this.domElement = domElement
+    this.sketchManager = sketchManager
+    this.width = width
+    this.height = height
+  }
+
+  setupDom() {
+    this.canvasContainer = document.createElement('div')
+    this.canvasContainer.className = 'grid-div'
+    this.canvas = document.createElement('canvas')
+    this.canvas.className = 'webgl-grid'
+    this.canvasContainer.append(this.canvas)
+    document.body.append(this.canvasContainer)
+  }
+
+  createCard() {
+    const canvasContainer = document.createElement('div')
+    canvasContainer.className = 'grid-div'
+    const canvas = document.createElement('canvas')
+    canvas.className = 'webgl-grid'
+    canvasContainer.append(canvas)
+    return canvasContainer
+  }
+
+  generate(data) {
+    // Setup card and append to viewport
+    // This doesn't require being added to Document.
+    const canvasContainer = this.createCard()
+    const canvas = canvasContainer.querySelector("canvas")
+
+    // Create new sketch and components.
+    const sketch = new Sketch(canvas)
+    const projectNum = 123
+    const tokenData = genTokenData(projectNum)
+    const random = new Random(tokenData)
+    const model = new Model(sketch, random)
+    const presets = new Presets(model, random)
+
+    // Copy sketchManager sketch data into this thumbnail model instance
+    model.data = { ...model.data, ...this.sketchManager.model.data }
+    // sketch.data = model.data // TODO: Create a proper function for this
+
+    sketch.sizes.updateDimensions = () => {
+      sketch.sizes.width = this.width
+      sketch.sizes.height = this.height
+    }
+    sketch.sizes.updateAll()
+
+    // Create virtual random adapter controllers
+    // This virtual controller uses the constraints from the visible GUI preset interval sliders.
+    const controllerNames = Object.keys(this.sketchManager.controller.presetParams)
+    const guiPresetController = {}
+
+    for (const cn of controllerNames) {
+      const key = 'preset_' + cn
+
+      guiPresetController[cn] = {
+        func: random.random_num.bind(random),
+        args: [data[key].min, data[key].max]
+      }
+    }
+
+    presets.presets['guiPresetController'] = guiPresetController
+    presets.select('guiPresetController')
+    model.refresh()
+
+    // Create output view
+    const div = document.createElement('div')
+    div.className = 'grid-div'
+    const imgNode = new Image()
+    imgNode.style.width = this.width + 'px'
+    imgNode.style.height = this.height + 'px'
+    div.appendChild(imgNode)
+    this.domElement.append(div)
+
+    imgNode.onclick = () => {
+      this.domElement.style.display = 'none'
+      this.sketchManager.random.generateNewToken(random.tokenData.hash)
+      this.sketchManager.init(true)
+      this.sketchManager.show()
+    }
+
+    setTimeout(() => {
+      sketch.drawFrame()
+      setTimeout(() => {
+        imgNode.src = canvas.toDataURL()
+        canvas.remove()
+        canvasContainer.remove()
+      }, GenArrayDelays.img)
+    }, GenArrayDelays.loader)
+  }
+}
