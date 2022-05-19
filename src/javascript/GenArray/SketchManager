@@ -22,19 +22,16 @@ export class SketchManager {
     this.model = new Model(this.sketch, this.random)
     this.presets = new Presets(this.model, this.random)
     this.controller = new Controller(this.sketch, this.model, this.presets)
-    // this.presets.select('thumbnail_test')
-    // this.model.refresh()
-    // this.controller.updateFromModel()
-    // this.init()
   }
 
+  // TODO: Remove these from sketch Manager.
+  //       View maintenance should be done elsewhere
   hide() {
-    // TODO: Better handle parent container
-    this.domElement.parentElement.style.display = 'none'
+    this.domElement.style.display = 'none'
   }
 
   show() {
-    this.domElement.parentElement.style.display = 'block'
+    this.domElement.style.display = 'block'
   }
 
   setupRandom(hash) {
@@ -49,7 +46,6 @@ export class SketchManager {
     this.domElement.append(this.canvas)
   }
 
-
   // Creates a new sketch and updates existing components to point to new sketch.
   init() {
     this.createCanvas()
@@ -58,11 +54,9 @@ export class SketchManager {
     this.model.setBindings()
     this.controller.sketch = this.sketch
     this.random.compileHash()
-    // this.presets.select('guiPresetController')
     this.controller.randomizeWithPreset()
     this.model.refresh()
     this.controller.updateFromModel()
-    // this.sketch.start()
   }
 
   start() {

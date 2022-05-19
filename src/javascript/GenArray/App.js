@@ -6,6 +6,13 @@ import { Model } from "../three/Model"
 import { canvasToImgNode } from "../Util"
 import { SketchManager } from "./SketchManager"
 
+// FIXME: Use async loop instead of delays
+const delays = {
+  loop: 350,
+  loader: 100,
+  img: 50
+}
+
 function addGenArrayToController(controller) {
   // GenArray
   const genArrayParams = {
@@ -28,7 +35,7 @@ function addGenArrayToController(controller) {
   }).on('click', () => {
     const presets = controller.pane.exportPreset()
     dpaViewMulti.innerHTML = ''
-    dpaViewSingle.style.display = 'none'
+    sketchManager.hide()
     dpaViewMulti.style.display = 'block'
     const nOutputs = presets.genArray_iterations
 
@@ -38,7 +45,7 @@ function addGenArrayToController(controller) {
     for (let i = 0; i < nOutputs; i++) {
       setTimeout(() => {
         sketchThumbnailGenerator.generate(presets)
-      }, i * 50)
+      }, i * delays.loop)
     }
   });
 }
@@ -60,15 +67,24 @@ class SketchThumbnailGenerator {
     document.body.append(this.canvasContainer)
   }
 
-  generate(presetData) {
-    this.setupDom()
+  createCard() {
+    const canvasContainer = document.createElement('div')
+    canvasContainer.className = 'grid-div'
+    const canvas = document.createElement('canvas')
+    canvas.className = 'webgl-grid'
+    canvasContainer.append(canvas)
+    return canvasContainer
+  }
 
-    const sketch = new Sketch(this.canvas)
-    sketch.sizes.updateDimensions = () => {
-      sketch.sizes.width = this.width
-      sketch.sizes.height = this.height
-    }
-    sketch.sizes.updateAll()
+  generate(data) {
+    // Setup card and append to viewport
+    // This doesn't require being added to Document.
+    const canvasContainer = this.createCard()
+    const canvas = canvasContainer.querySelector("canvas")
+
+    // Create new sketch
+    const sketch = new Sketch(canvas)
+
 
     const projectNum = 123
     const tokenData = genTokenData(projectNum)
@@ -76,32 +92,19 @@ class SketchThumbnailGenerator {
     const model = new Model(sketch, random)
     const presets = new Presets(model, random)
 
-    // TODO: Redefining this here isn't necessary.
-    // const guiPresetController = {
-    //   'rot x': {
-    //     func: random.random_num.bind(random),
-    //     args: [presetData['preset_rot x'].min, presetData['preset_rot x'].max]
-    //   },
-    //   'rot y': {
-    //     func: random.random_num.bind(random),
-    //     args: [presetData['preset_rot y'].min, presetData['preset_rot y'].max]
-    //   },
-    //   'rot z': {
-    //     func: random.random_num.bind(random),
-    //     args: [presetData['preset_rot z'].min, presetData['preset_rot z'].max]
-    //   },
-    //   // 'background': {
-    //   //     func: random.random_choice.bind(random),
-    //   //     args: [['#aaaa00', '#00aaaa', '#aa00aa']]
-    //   // }
-    // }
+    // Copy sketchManager sketch data into this thumbnail model instance
+    model.data = { ...model.data, ...sketchManager.model.data }
+    sketch.data = model.data // TODO: Create a proper function for this
 
-    // presets.presets['guiPresetController'] = guiPresetController
-    // presets.select('guiPresetController')
+    sketch.sizes.updateDimensions = () => {
+      sketch.sizes.width = this.width
+      sketch.sizes.height = this.height
+    }
+    sketch.sizes.updateAll()
 
-    // TODO: Must place presetParams somehwere
+    // Create virtual random adapter controllers
+    // FIXME: Global. Always automate getting presetParams for a single source.
     const controllerNames = Object.keys(sketchManager.controller.presetParams)
-    return
     const guiPresetController = {}
 
     for (const cn of controllerNames) {
@@ -115,39 +118,34 @@ class SketchThumbnailGenerator {
 
     presets.presets['guiPresetController'] = guiPresetController
     presets.select('guiPresetController')
-
-  
     model.refresh()
 
-    // FIXME: Doesn't work with asynchronous loading of assets such as images.
-    sketch.drawFrame()
+    // Create output view
+    const div = document.createElement('div')
+    div.className = 'grid-div'
+    const imgNode = new Image()
+    imgNode.style.width = this.width + 'px'
+    imgNode.style.height = this.height + 'px'
+    div.appendChild(imgNode)
+    this.domElement.append(div)
 
-    requestAnimationFrame(() => {
-      const div = document.createElement('div')
-      div.className = 'grid-div'
-      this.domElement.appendChild(div)
-      const imgNode = canvasToImgNode(this.canvas)
-      imgNode.style.width = this.width + 'px'
-      imgNode.style.height = this.height + 'px'
-      div.appendChild(imgNode)
-      this.domElement.append(div)
+    imgNode.onclick = () => {
+      dpaViewMulti.style.display = 'none'
+      console.log(random.tokenData.hash)
+      sketchManager.random.generateNewToken(random.tokenData.hash)
+      sketchManager.init()
+      sketchManager.show()
+    }
 
-      imgNode.onclick = () => {
-        grid.style.display = 'none'
-        sketchManager.show()
-        console.log(random.tokenData.hash)
-        sketchManager.random.generateNewToken(random.tokenData.hash)
-        sketchManager.init()
-        // presets.select(guiPresetController)
-        // model.refresh()
-
-        //   showWebgl()
-        //   // Don't update presets
-      }
-
-      this.canvas.remove()
-      this.canvasContainer.remove()
-    })
+    setTimeout(() => {
+      sketch.drawFrame()
+      setTimeout(() => {
+        console.log(canvas)
+        imgNode.src = canvas.toDataURL()
+        canvas.remove()
+        canvasContainer.remove()
+      }, delays.img)
+    }, delays.loader)
   }
 }
 
