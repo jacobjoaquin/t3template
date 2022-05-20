@@ -13,6 +13,7 @@ export class SketchThumbnailGenerator {
   canvas
   sketchManager
   data
+  random
 
   constructor(domElement, sketchManager, width = 200, height = 200) {
     this.domElement = domElement
@@ -30,7 +31,7 @@ export class SketchThumbnailGenerator {
     document.body.append(this.canvasContainer)
   }
 
-  createCard() {
+  createCanvasComponent() {
     const canvasContainer = document.createElement('div')
     canvasContainer.className = 'grid-div'
     const canvas = document.createElement('canvas')
@@ -39,49 +40,7 @@ export class SketchThumbnailGenerator {
     return canvasContainer
   }
 
-  generate(data) {
-    // Setup card and append to viewport
-    // This doesn't require being added to Document.
-    const canvasContainer = this.createCard()
-    const canvas = canvasContainer.querySelector("canvas")
-
-    // Create new sketch and components.
-    const sketch = new Sketch(canvas)
-    const projectNum = 123
-    const tokenData = genTokenData(projectNum)
-    const random = new Random(tokenData)
-    const model = new Model(sketch, random)
-    const presets = new Presets(model, random)
-
-    // Copy sketchManager sketch data into this thumbnail model instance
-    model.data = { ...model.data, ...this.sketchManager.model.data }
-    // sketch.data = model.data // TODO: Create a proper function for this
-
-    sketch.sizes.updateDimensions = () => {
-      sketch.sizes.width = this.width
-      sketch.sizes.height = this.height
-    }
-    sketch.sizes.updateAll()
-
-    // Create virtual random adapter controllers
-    // This virtual controller uses the constraints from the visible GUI preset interval sliders.
-    const controllerNames = Object.keys(this.sketchManager.controller.presetParams)
-    const guiPresetController = {}
-
-    for (const cn of controllerNames) {
-      const key = 'preset_' + cn
-
-      guiPresetController[cn] = {
-        func: random.random_num.bind(random),
-        args: [data[key].min, data[key].max]
-      }
-    }
-
-    presets.presets['guiPresetController'] = guiPresetController
-    presets.select('guiPresetController')
-    model.refresh()
-
-    // Create output view
+  createImgNodeComponent() {
     const div = document.createElement('div')
     div.className = 'grid-div'
     const imgNode = new Image()
@@ -92,11 +51,61 @@ export class SketchThumbnailGenerator {
 
     imgNode.onclick = () => {
       this.domElement.style.display = 'none'
-      this.sketchManager.random.generateNewToken(random.tokenData.hash)
+      this.sketchManager.random.generateNewToken(this.random.tokenData.hash)
       this.sketchManager.init(true)
       this.sketchManager.show()
     }
 
+    return imgNode
+  }
+
+  createPresetAdapter(presets, presetData) {
+    // Create virtual random adapter controllers
+    // This virtual controller uses the constraints from the visible GUI preset interval sliders.
+    const controllerNames = Object.keys(this.sketchManager.controller.presetParams)
+    const guiPresetController = {}
+
+    for (const cn of controllerNames) {
+      const key = 'preset_' + cn
+
+      guiPresetController[cn] = {
+        func: presets.random.random_num.bind(presets.random),
+        args: [presetData[key].min, presetData[key].max]
+      }
+    }
+
+    presets.presets['guiPresetController'] = guiPresetController
+    presets.select('guiPresetController')
+  }
+
+  generate(presetData) {
+    // Setup card and append to viewport
+    // This doesn't require being added to Document.
+    const canvasContainer = this.createCanvasComponent()
+    const canvas = canvasContainer.querySelector("canvas")
+
+    // Create new sketch and components.
+    const sketch = new Sketch(canvas)
+    const projectNum = 123
+    const tokenData = genTokenData(projectNum)
+    this.random = new Random(tokenData)
+    const model = new Model(sketch, this.random)
+    const presets = new Presets(model, this.random)
+
+    // Override updateDimensions() function and update size
+    sketch.sizes.updateDimensions = () => {
+      sketch.sizes.width = this.width
+      sketch.sizes.height = this.height
+    }
+    sketch.sizes.updateAll()
+
+    // Setup adapter
+    this.createPresetAdapter(presets, presetData)
+
+    // Create imgNode component
+    const imgNode = this.createImgNodeComponent()
+
+    // Draw frame and copy to imgNode component
     setTimeout(() => {
       sketch.drawFrame()
       setTimeout(() => {

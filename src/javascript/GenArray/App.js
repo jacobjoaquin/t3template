@@ -34,24 +34,22 @@ function addGenArrayToController(controller) {
   genArrayFolder.addButton({
     title: 'Render',
   }).on('click', () => {
-    const presets = controller.pane.exportPreset()
+    const presetData = controller.pane.exportPreset()
     dpaViewMulti.innerHTML = ''
     sketchManager.hide()
     dpaViewMulti.style.display = 'block'
-    const nOutputs = presets.genArray_iterations
+    const nOutputs = presetData.genArray_iterations
 
     // FIXME: Rewrite for better asynchronous looping.
     //       One loop should execute at a time.
     //       When compeleted, if there ungenerated thumbnails, generate thumbnail
     for (let i = 0; i < nOutputs; i++) {
       setTimeout(() => {
-        sketchThumbnailGenerator.generate(presets)
+        sketchThumbnailGenerator.generate(presetData)
       }, i * GenArrayDelays.loop)
     }
   });
 }
-
-
 
 
 // Create DOM for App

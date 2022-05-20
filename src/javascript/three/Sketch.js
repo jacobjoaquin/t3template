@@ -14,7 +14,6 @@ export class Sketch {
     //   Generate data in model
     //   Push model data to this.data
     //   Call sketch.setup() in App
-
   }
 
   setup() {

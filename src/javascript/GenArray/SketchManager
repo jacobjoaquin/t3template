@@ -24,7 +24,7 @@ export class SketchManager {
     this.controller = new Controller(this.sketch, this.model, this.presets)
   }
 
-  // TODO: Remove these from sketch Manager.
+  // TODO: Remove these from sketch Manager?
   //       View maintenance should be done elsewhere
   hide() {
     this.domElement.style.display = 'none'
