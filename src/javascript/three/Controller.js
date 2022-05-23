@@ -35,6 +35,9 @@ export class Controller {
 
     }
 
+    // TODO: A randomize function should create new instance of Sketch.
+    //       This will ensure all randomized parameters will be updated.
+    //       Doing it this way will eliminate effort to design SKetch a certain way to conform.
     randomizeWithPreset() {
         // Original by-hand method:
         // const guiPresetController = {

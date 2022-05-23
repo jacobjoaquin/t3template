@@ -101,7 +101,8 @@ export class SketchThumbnailGenerator {
 
     // Setup adapter
     this.createPresetAdapter(presets, presetData)
-
+    model.refresh()
+    
     // Create imgNode component
     const imgNode = this.createImgNodeComponent()
 
