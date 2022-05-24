@@ -69,7 +69,7 @@ export class SketchThumbnailGenerator {
     presets.select('guiPresetController')
   }
 
-  generate(presetData) {
+  generate(presetData, hash) {
     // Setup card and append to viewport
     // This doesn't require being added to Document.
     const canvasContainer = this.createCanvasComponent()
@@ -78,7 +78,7 @@ export class SketchThumbnailGenerator {
     // Create new sketch and components.
     const sketch = new Sketch(canvas)
     const projectNum = 123
-    const tokenData = genTokenData(projectNum)
+    const tokenData = genTokenData(projectNum, hash)
     this.random = new Random(tokenData)
     const model = new Model(sketch, this.random)
     const presets = new Presets(model, this.random)

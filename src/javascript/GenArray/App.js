@@ -40,12 +40,18 @@ function addGenArrayToController(controller) {
     dpaViewMulti.style.display = 'block'
     const nOutputs = presetData.genArray_iterations
 
+    // Consistent random seed/hash feature
+    const baseHash = '0x83444c51e4a31272e92536ac41c4fa17f26dbcfd13cae0bc5ed64fd09c256c8f'
+    const token = genTokenData(123, baseHash)
+    const random = new Random(token)
+
     // FIXME: Rewrite for better asynchronous looping.
     //       One loop should execute at a time.
     //       When compeleted, if there ungenerated thumbnails, generate thumbnail
     for (let i = 0; i < nOutputs; i++) {
+      const h = random.random_hash()
       setTimeout(() => {
-        sketchThumbnailGenerator.generate(presetData)
+        sketchThumbnailGenerator.generate(presetData, h)
       }, i * GenArrayDelays.loop)
     }
   });
