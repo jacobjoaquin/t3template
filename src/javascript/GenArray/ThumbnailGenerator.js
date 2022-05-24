@@ -2,7 +2,6 @@ import { Sketch } from "../three/Sketch"
 import { genTokenData, Random } from "../three/abRandom"
 import { Presets } from "../three/Presets"
 import { Model } from "../three/Model"
-import { GenArrayDelays } from "./App"
 
 
 export class SketchThumbnailGenerator {

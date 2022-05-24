@@ -1,25 +1,13 @@
-import { Sketch } from "../three/Sketch"
 import { genTokenData, Random } from "../three/abRandom"
-import { Controller } from "../three/Controller"
-import { Presets } from "../three/Presets"
-import { Model } from "../three/Model"
-import { canvasToImgNode } from "../Util"
 import { SketchManager } from "./SketchManager"
 import { SketchThumbnailGenerator } from "./ThumbnailGenerator"
-
-// FIXME: Use async loop instead of delays
-export const GenArrayDelays = {
-  loop: 350,
-  loader: 100,
-  img: 50
-}
 
 function addGenArrayToController(controller) {
   // GenArray
   const genArrayParams = {
     projectNum: 123,
     hash: 0,
-    'iterations': 5,
+    'iterations': 10,
   }
 
   const genArrayFolder = controller.pane.addFolder({ title: 'GenArray' })
@@ -27,7 +15,7 @@ function addGenArrayToController(controller) {
   genArrayFolder
     .addInput(genArrayParams, 'iterations', {
       min: 1,
-      max: 100,
+      max: 1024,
       presetKey: 'genArray_iterations',
       format: (v) => v.toFixed()
     })
@@ -82,4 +70,3 @@ addGenArrayToController(sketchManager.controller)
 
 sketchManager.init()
 sketchManager.start()
-
