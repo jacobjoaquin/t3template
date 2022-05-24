@@ -72,3 +72,5 @@ const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti, sket
 addGenArrayToController(sketchManager.controller)
 sketchManager.init()
 sketchManager.start()
+
+console.log(sketchManager.model.random.random_hash())

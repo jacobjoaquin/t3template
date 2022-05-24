@@ -72,4 +72,12 @@ export class Random {
     random_choice(list) {
         return list[this.random_int(0, list.length - 1)];
     }
+    // Creates a hash
+    random_hash() {
+        let h = "0x"
+        for (let i = 0; i < 64; i++) {
+            h += Math.floor(this.random_dec() * 16).toString(16)
+        }
+        return h
+    }
 }
