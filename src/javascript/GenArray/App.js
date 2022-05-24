@@ -22,39 +22,42 @@ function addGenArrayToController(controller) {
     'iterations': 5,
   }
 
-  const genArrayFolder = controller.pane.addFolder({
-    title: 'GenArray'
-  })
-  genArrayFolder.addInput(genArrayParams, 'iterations', {
-    min: 1,
-    max: 100,
-    presetKey: 'genArray_iterations',
-    format: (v) => v.toFixed()
-  })
-  genArrayFolder.addButton({
-    title: 'Render',
-  }).on('click', () => {
-    const presetData = controller.pane.exportPreset()
-    dpaViewMulti.innerHTML = ''
-    sketchManager.hide()
-    dpaViewMulti.style.display = 'block'
-    const nOutputs = presetData.genArray_iterations
+  const genArrayFolder = controller.pane.addFolder({ title: 'GenArray' })
 
-    // Consistent random seed/hash feature
-    const baseHash = '0x83444c51e4a31272e92536ac41c4fa17f26dbcfd13cae0bc5ed64fd09c256c8f'
-    const token = genTokenData(123, baseHash)
-    const random = new Random(token)
+  genArrayFolder
+    .addInput(genArrayParams, 'iterations', {
+      min: 1,
+      max: 100,
+      presetKey: 'genArray_iterations',
+      format: (v) => v.toFixed()
+    })
 
-    // FIXME: Rewrite for better asynchronous looping.
-    //       One loop should execute at a time.
-    //       When compeleted, if there ungenerated thumbnails, generate thumbnail
-    for (let i = 0; i < nOutputs; i++) {
-      const h = random.random_hash()
-      setTimeout(() => {
-        sketchThumbnailGenerator.generate(presetData, h)
-      }, i * GenArrayDelays.loop)
-    }
-  });
+  genArrayFolder
+    .addButton({
+      title: 'Render',
+    })
+    .on('click', () => {
+      const presetData = controller.pane.exportPreset()
+      dpaViewMulti.innerHTML = ''
+      sketchManager.hide()
+      dpaViewMulti.style.display = 'block'
+      const nOutputs = presetData.genArray_iterations
+
+      // Consistent random seed/hash feature
+      const baseHash = '0x83444c51e4a31272e92536ac41c4fa17f26dbcfd13cae0bc5ed64fd09c256c8f'
+      const token = genTokenData(123, baseHash)
+      const random = new Random(token)
+
+      // Create one thumbnail at a time
+      async function sequentialThumbnailGenerator() {
+        for (let i = 0; i < nOutputs; i++) {
+          const h = random.random_hash()
+          await sketchThumbnailGenerator.generate(presetData, h)
+        }
+      }
+
+      sequentialThumbnailGenerator()
+    })
 }
 
 
@@ -77,7 +80,6 @@ const sketchManager = new SketchManager(dpaViewSingle)
 const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti, sketchManager)
 addGenArrayToController(sketchManager.controller)
 
-
-
 sketchManager.init()
 sketchManager.start()
+

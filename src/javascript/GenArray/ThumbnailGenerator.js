@@ -69,61 +69,53 @@ export class SketchThumbnailGenerator {
     presets.select('guiPresetController')
   }
 
-  generate(presetData, hash) {
-    // Setup card and append to viewport
-    // This doesn't require being added to Document.
-    const canvasContainer = this.createCanvasComponent()
-    const canvas = canvasContainer.querySelector("canvas")
+  async generate(presetData, hash) {
+    return new Promise(gResolve => {
+      // Setup card and append to viewport
+      // This doesn't require being added to Document.
+      const canvasContainer = this.createCanvasComponent()
+      const canvas = canvasContainer.querySelector("canvas")
 
-    // Create new sketch and components.
-    const sketch = new Sketch(canvas)
-    const projectNum = 123
-    const tokenData = genTokenData(projectNum, hash)
-    this.random = new Random(tokenData)
-    const model = new Model(sketch, this.random)
-    const presets = new Presets(model, this.random)
+      // Create new sketch and components.
+      const sketch = new Sketch(canvas)
+      const projectNum = 123
+      const tokenData = genTokenData(projectNum, hash)
+      this.random = new Random(tokenData)
+      const model = new Model(sketch, this.random)
+      const presets = new Presets(model, this.random)
 
-    // Override updateDimensions() function and update size
-    sketch.sizes.updateDimensions = () => {
-      sketch.sizes.width = this.width
-      sketch.sizes.height = this.height
-    }
-    sketch.sizes.updateAll()
+      // Override updateDimensions() function and update size
+      sketch.sizes.updateDimensions = () => {
+        sketch.sizes.width = this.width
+        sketch.sizes.height = this.height
+      }
+      sketch.sizes.updateAll()
 
-    // Setup adapter
-    this.createPresetAdapter(presets, presetData)
-    model.refresh()
+      // Setup adapter
+      this.createPresetAdapter(presets, presetData)
+      model.refresh()
 
-    // Create imgNode component
-    const imgNode = this.createImgNodeComponent()
+      // Create imgNode component
+      const imgNode = this.createImgNodeComponent()
 
-    
-    function drawTheFrame() {
-      return new Promise((resolve) => {
-        console.log('Promise ' + hash)
-        sketch.drawFrame()
-        requestAnimationFrame(resolve)
-      })
-    }
+      // Draws the frame then resolves
+      function drawTheFrame() {
+        return new Promise((resolve) => {
+          sketch.drawFrame()
+          requestAnimationFrame(resolve)
+        })
+      }
+      
+      // Create image then copy to image
+      async function createTheThumbnail() {
+        await drawTheFrame()
+        imgNode.src = canvas.toDataURL()
+        canvas.remove()
+        canvasContainer.remove()
+        gResolve()
+      }
 
-    async function copyCanvasToImgNode() {
-      await drawTheFrame()
-      imgNode.src = canvas.toDataURL()
-      canvas.remove()
-      canvasContainer.remove()
-    }
-
-    copyCanvasToImgNode()
+      createTheThumbnail()
+    })
   }
-
-  //   // Draw frame and copy to imgNode component
-  //   setTimeout(() => {
-  //     sketch.drawFrame()
-  //     setTimeout(() => {
-  //       imgNode.src = canvas.toDataURL()
-  //       canvas.remove()
-  //       canvasContainer.remove()
-  //     }, GenArrayDelays.img)
-  //   }, GenArrayDelays.loader)
-  // }
 }
