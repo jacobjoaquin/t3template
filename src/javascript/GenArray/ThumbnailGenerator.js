@@ -6,15 +6,6 @@ import { GenArrayDelays } from "./App"
 
 
 export class SketchThumbnailGenerator {
-  domElement
-  width
-  height
-  canvasContainer
-  canvas
-  sketchManager
-  data
-  random
-
   constructor(domElement, sketchManager, width = 200, height = 200) {
     this.domElement = domElement
     this.sketchManager = sketchManager

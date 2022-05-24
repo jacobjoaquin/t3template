@@ -6,14 +6,6 @@ import { Model } from "../three/Model"
 
 
 export class SketchManager {
-  canvas
-  controller
-  domElement
-  model
-  presets
-  random
-  sketch
-
   constructor(domElement, hash = undefined) {
     this.domElement = domElement
     this.createCanvas()                    // Temp canvas
