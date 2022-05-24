@@ -43,17 +43,11 @@ export class Sketch {
   }
 
   tick() {
-    this.tickBefore()
     this.draw()
     requestAnimationFrame(this.tick.bind(this))
-    this.tickAfter()
   }
 
   start() {
     this.tick()
   }
-
-  // Temporary hooks for tick(). Override these.
-  tickBefore() { }
-  tickAfter() { }
 }

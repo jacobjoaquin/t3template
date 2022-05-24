@@ -31,8 +31,6 @@ export class Controller {
         this.addPresets()
         // this.addGenArray()
         const preset = this.pane.exportPreset();
-        console.log(preset)
-
     }
 
     // TODO: A randomize function should create new instance of Sketch.

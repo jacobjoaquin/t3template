@@ -6,6 +6,7 @@ import { Model } from "../three/Model"
 import { canvasToImgNode } from "../Util"
 import { SketchManager } from "./SketchManager"
 import { SketchThumbnailGenerator } from "./ThumbnailGenerator"
+import Stats from "stats.js"
 
 // FIXME: Use async loop instead of delays
 export const GenArrayDelays = {
@@ -76,7 +77,8 @@ document.body.append(dpaApp)
 const sketchManager = new SketchManager(dpaViewSingle)
 const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti, sketchManager)
 addGenArrayToController(sketchManager.controller)
+
+
+
 sketchManager.init()
 sketchManager.start()
-
-console.log(sketchManager.model.random.random_hash())
