@@ -6,7 +6,6 @@ import { Model } from "../three/Model"
 import { canvasToImgNode } from "../Util"
 import { SketchManager } from "./SketchManager"
 import { SketchThumbnailGenerator } from "./ThumbnailGenerator"
-import Stats from "stats.js"
 
 // FIXME: Use async loop instead of delays
 export const GenArrayDelays = {

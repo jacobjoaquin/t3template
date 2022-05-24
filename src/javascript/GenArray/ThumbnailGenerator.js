@@ -93,18 +93,37 @@ export class SketchThumbnailGenerator {
     // Setup adapter
     this.createPresetAdapter(presets, presetData)
     model.refresh()
-    
+
     // Create imgNode component
     const imgNode = this.createImgNodeComponent()
 
-    // Draw frame and copy to imgNode component
-    setTimeout(() => {
-      sketch.drawFrame()
-      setTimeout(() => {
-        imgNode.src = canvas.toDataURL()
-        canvas.remove()
-        canvasContainer.remove()
-      }, GenArrayDelays.img)
-    }, GenArrayDelays.loader)
+    
+    function drawTheFrame() {
+      return new Promise((resolve) => {
+        console.log('Promise ' + hash)
+        sketch.drawFrame()
+        requestAnimationFrame(resolve)
+      })
+    }
+
+    async function copyCanvasToImgNode() {
+      await drawTheFrame()
+      imgNode.src = canvas.toDataURL()
+      canvas.remove()
+      canvasContainer.remove()
+    }
+
+    copyCanvasToImgNode()
   }
+
+  //   // Draw frame and copy to imgNode component
+  //   setTimeout(() => {
+  //     sketch.drawFrame()
+  //     setTimeout(() => {
+  //       imgNode.src = canvas.toDataURL()
+  //       canvas.remove()
+  //       canvasContainer.remove()
+  //     }, GenArrayDelays.img)
+  //   }, GenArrayDelays.loader)
+  // }
 }
