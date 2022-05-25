@@ -55,6 +55,7 @@ export class SketchManager {
     // Override
     this.sketch.tick = () => {
       stats.begin()
+      this.sketch.update()
       this.sketch.draw()
       requestAnimationFrame(this.sketch.tick.bind(this))
       stats.end()

@@ -100,6 +100,7 @@ export class SketchThumbnailGenerator {
       // Draws the frame then resolves
       function drawTheFrame() {
         return new Promise((resolve) => {
+          sketch.t = 0
           sketch.drawFrame()
           requestAnimationFrame(resolve)
         })
