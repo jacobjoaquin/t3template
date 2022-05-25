@@ -73,7 +73,7 @@ function addGenArrayToController(controller) {
     //     sketch_hash: this.model.random.tokenData.hash
     // })
 
-      console.log(preset.stringify())
+      // console.log(preset.stringify())
     })
 }
 
