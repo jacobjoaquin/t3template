@@ -14,7 +14,6 @@ export class SketchThumbnailGenerator {
 
   setupDom() {
     this.canvasContainer = document.createElement('div')
-    this.canvasContainer.className = 'grid-div'
     this.canvas = document.createElement('canvas')
     this.canvas.className = 'webgl-grid'
     this.canvasContainer.append(this.canvas)
@@ -23,7 +22,6 @@ export class SketchThumbnailGenerator {
 
   createCanvasComponent() {
     const canvasContainer = document.createElement('div')
-    canvasContainer.className = 'grid-div'
     const canvas = document.createElement('canvas')
     canvas.className = 'webgl-grid'
     canvasContainer.append(canvas)
@@ -32,7 +30,9 @@ export class SketchThumbnailGenerator {
 
   createImgNodeComponent() {
     const div = document.createElement('div')
-    div.className = 'grid-div'
+    div.style.width = this.width + 'px'
+    div.style.height = this.height + 'px'
+    div.style.float = 'left'
     const imgNode = new Image()
     imgNode.style.width = this.width + 'px'
     imgNode.style.height = this.height + 'px'

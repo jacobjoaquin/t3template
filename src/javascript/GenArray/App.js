@@ -65,7 +65,7 @@ document.body.append(dpaApp)
 
 // Create and Start App Components
 const sketchManager = new SketchManager(dpaViewSingle)
-const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti, sketchManager)
+const sketchThumbnailGenerator = new SketchThumbnailGenerator(dpaViewMulti, sketchManager, 200, 200)
 addGenArrayToController(sketchManager.controller)
 
 sketchManager.init()
