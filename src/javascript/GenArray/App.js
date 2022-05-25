@@ -8,6 +8,9 @@ function addGenArrayToController(controller) {
     projectNum: 123,
     hash: 0,
     'iterations': 10,
+    import: '{}',
+    export: '{}'
+
   }
 
   const genArrayFolder = controller.pane.addFolder({ title: 'GenArray' })
@@ -45,6 +48,32 @@ function addGenArrayToController(controller) {
       }
 
       sequentialThumbnailGenerator()
+    })
+
+    genArrayFolder.addSeparator()
+
+    genArrayFolder.addMonitor(genArrayParams, 'import', {
+      multiline: true,
+      lineCount: 1,
+    })
+
+    genArrayFolder.addMonitor(genArrayParams, 'export', {
+      multiline: true,
+      lineCount: 1,
+    })
+
+    const exportButton = genArrayFolder.addButton({
+      title: 'Export Settings',
+      // label: 'counter',   // optional
+    })
+    
+    exportButton.on('click', () => {
+      const preset = controller.pane.exportPreset()
+    //   this.pane.importPreset({
+    //     sketch_hash: this.model.random.tokenData.hash
+    // })
+
+      console.log(preset.stringify())
     })
 }
 
